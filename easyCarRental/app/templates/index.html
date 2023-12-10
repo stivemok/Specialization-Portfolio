@@ -1,0 +1,59 @@
+{% extends "base.html" %}
+
+{% block content %}
+        <div class="carousel">
+            <div class="slides">
+                <img src="../static/css/cars/compact/swift 1.jpg" alt="swift">
+                <img src="../static/css/cars/compact/swift 2.jfif" alt="swift">
+                <img src="../static/css/cars/sedan/Suzuki dezier 1.jpg" alt="dezier">
+                <img src="../static/css/cars/sedan/Suzuki dezier 2.jpg" alt="dezier">
+                <img src="../static/css/cars/sedan/Toyota camrey.jpg" alt="camrey">
+                <img src="../static/css/cars/suv/tuson 2.png" alt="tucson">
+                <img src="../static/css/cars/suv/land cruser 1.jfif" alt="Land cruser">
+                <img src="../static/css/cars/suv/land cruser 2.png" alt="Land cruser">
+            </div>
+        </div>
+
+
+       <!-- This is a comment in HTML. -->
+       <section class="booking-form container">
+        <h2>Search a Vehicle</h2>
+        <form action="/search-vehicle" method="POST" id="bookingForm">
+        <label for="pickup">Pick-up Date:</label><br>
+        <input type="date" id="pickup-date" name="pickup" required pattern="\d{4}-\d{2}-\d{2}"><br>
+        <label for="dropdown">Pickup Location</label><br>
+        <select id="pickup-location">
+            <option value="Easy Rentals Office">Easy Rentals Office</option>
+            <option value="ADD Airport">ADD Airport</option>
+        </select><br>
+        <label for="dropoff">Drop-off Date</label><br>
+        <input type="date" id="dropoff-date" name="dropoff" required pattern="\d{4}-\d{2}-\d{2}"><br>
+        <label for="dropdown">Drop-off Location</label><br>
+        <select id="dropoff-location">
+            <option value="Easy Rentals Office">Easy Rentals Office</option>
+            <option value="ADD Airport">ADD Airport</option><br>
+        </select><br>
+        <label for="vehicle">Vehicle Type:</label><br>
+        <select id="vehicle" name="vehicle">
+          <option value="sedan">Sedan</option>
+          <option value="compact">Compact</option>
+          <option value="suv">SUV</option>
+          <option value="truck">Truck</option>
+          <option value="van">Van</option>
+        </select>
+     <button type="submit" class="btn btn-primary">Search Vehicle</button>
+      </section>
+    
+    
+  
+  </body>
+    <!-- This is a comment in HTML. -->
+  <footer>
+    <p>2023 Easy Car Rentals.</p><br>
+    <p>|Contact us: <br>
+      |Email: info@easycarrentals.com<br>
+      |Phone: +251 (555) 123-4567<br>
+      |Address: Addis Ababa, Ethiopia</p>
+  </footer>
+    
+{% endblock %}

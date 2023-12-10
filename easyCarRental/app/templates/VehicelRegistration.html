@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<h1>Car Rental Registration Form</h1>
+    <form method="post" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+        <div class="form-group">
+            {{ form.fname.label }}<br>
+            {{ form.fname(size=32) }}<br>
+            {% for error in form.fname.errors %}
+                <span style="color: red;">[{{ error }}]</span><br>
+            {% endfor %}
+        </div>
+        <div class="form-group">
+            {{ form.mname.label }}<br>
+            {{ form.mname(size=32) }}<br>
+            {% for error in form.mname.errors %}
+                <span style="color: red;">[{{ error }}]</span><br>
+            {% endfor %}
+        </div>
+        <div class="form-group">
+            {{ form.lname.label }}<br>
+            {{ form.lname(size=32) }}<br>
+            {% for error in form.lname.errors %}
+                <span style="color: red;">[{{ error }}]</span><br>
+            {% endfor %}
+        </div>
+        <div class="form-group">
+            {{ form.idpassport.label }}<br>
+            {{ form.idpassport }}<br>
+            {% for error in form.idpassport.errors %}
+                <span style="color: red;">[{{ error }}]</span><br>
+            {% endfor %}
+        </div>
+        <div class="form-group">
+            {{ form.phone.label }}<br>
+            {{ form.phone(size=32) }}<br>
+            {% for error in form.phone.errors %}
+                <span style="color: red;">[{{ error }}]</span><br>
+            {% endfor %}
+        </div>
+        <div class="form-group">
+            {{ form.carreg.label }}<br>
+            {{ form.carreg }}<br>
+            {% for error in form.carreg.errors %}
+                <span style="color: red;">[{{ error }}]</span><br>
+            {% endfor %}
+        </div>
+        <div class="form-group">
+            {{ form.photo1.label }}<br>
+            {{ form.photo1 }}<br>
+            {% for error in form.photo1.errors %}
+                <span style="color: red;">[{{ error }}]</span><br>
+            {% endfor %}
+        </div>
+        <div class="form-group">
+            {{ form.photo2.label }}<br>
+            {{ form.photo2 }}<br>
+            {% for error in form.photo2.errors %}
+                <span style="color: red;">[{{ error }}]</span><br>
+            {% endfor %}
+        </div>
+        <div class="form-group">
+            {{ form.email.label }}<br>
+            {{ form.email(size=32) }}<br>
+            {% for error in form.email.errors %}
+                <span style="color: red;">[{{ error }}]</span><br>
+            {% endfor %}
+        </div>
+        <div class="form-group">
+            {{ form.PlateNo.label }}<br>
+            {{ form.PlateNo(size=32) }}<br>
+            {% for error in form.PlateNo.errors %}
+                <span style="color: red;">[{{ error }}]</span><br>
+            {% endfor %}
+        </div>
+        <div class="form-group">
+            {{ form.make.label }}<br>
+            {{ form.make(size=32) }}<br>
+            {% for error in form.make.errors %}
+                <span style="color: red;">[{{ error }}]</span><br>
+            {% endfor %}
+        </div>
+        <div class="form-group">
+            {{ form.model.label }}<br>
+            {{ form.model(size=32) }}<br>
+            {% for error in form.model.errors %}
+                <span style="color: red;">[{{ error }}]</span><br>
+            {% endfor %}
+        </div>
+        <div class="form-group">
+            {{ form.color.label }}<br>
+            {{ form.color(size=32) }}<br>
+            {% for error in form.color.errors %}
+                <span style="color: red;">[{{ error }}]</span><br>
+            {% endfor %}
+        </div>
+        <div class="form-group">
+            {{ form.price.label }}<br>
+            {{ form.price(size=32) }}<br>
+            {% for error in form.price.errors %}
+                <span style="color: red;">[{{ error }}]</span><br>
+            {% endfor %}
+        </div>
+        <div class="form-group">
+            {{ form.condition.label }}<br>
+            {{ form.condition(size=32) }}<br>
+            {% for error in form.condition.errors %}
+                <span style="color: red;">[{{ error }}]</span><br>
+            {% endfor %}
+        </div>
+        <div class="form-group">
+            {{ form.vehicle.label }}<br>
+            {{ form.vehicle }}<br>
+            {% for error in form.vehicle.errors %}
+                <span style="color: red;">[{{ error }}]</span><br>
+            {% endfor %}
+        </div>
+        <div class="form-group">
+            {{ form.year.label }}<br>
+            {{ form.year }}<br>
+            {% for error in form.year.errors %}
+                <span style="color: red;">[{{ error }}]</span><br>
+            {% endfor %}
+        </div>
+        <div class="form-group">
+            {{ form.submit }}
+        </div>
+    </form>
+{% endblock %}

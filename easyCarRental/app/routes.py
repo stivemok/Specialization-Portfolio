@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-from app import app
-=======
 from urllib.parse import urlsplit
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import login_user, logout_user, current_user, login_required
@@ -14,23 +11,10 @@ from app.api.api_routes import get_cars
 import base64
 import requests
 
->>>>>>> 74564bc0f1cd9eaa1d9d24e5f983702f9cd5d961
 
 @app.route('/')
 @app.route('/index')
 def index():
-<<<<<<< HEAD
-    user = {'username': 'Stive'}
-    return '''
-<html>
-    <header>
-        <title>Home page - Easy Rentals</title>
-    </header>
-    <body>
-        <h1>Hello, ''' + user['username'] + '''!</h1>
-    </body>
-</html>'''
-=======
     form = VehicleSearchForm()
     return render_template("index.html", title='Home Page', form=form)
 
@@ -134,7 +118,7 @@ def location():
 @app.route('/vehicles', methods=['GET'])
 def vehicles():
     # Make a request to the API endpoint (/api/cars)
-    api_url = 'http://localhost:5000/api/cars'  # Replace with the actual URL of your API
+    api_url = 'http://localhost:3000/api/cars'  # Replace with the actual URL of your API
     page = request.args.get('page', default=1, type=int)
     per_page = request.args.get('per_page', default=10, type=int)
 
@@ -162,4 +146,3 @@ def display_all_entries():
 
     # Render the entries on a new page
     return render_template("all_entries.html", title='All Entries', entries=all_entries)
->>>>>>> 74564bc0f1cd9eaa1d9d24e5f983702f9cd5d961

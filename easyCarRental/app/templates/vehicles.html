@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>Cars</h2>
+
+  {% if cars %}
+    <ul style="list-style: none; padding: 0;" class="car-list">
+      {% for car in cars %}
+        <li style="margin-bottom: 20px; padding: 10px; border: 1px solid #ccc;" class="car-item">
+          <strong>{{ car.make }} {{ car.model }}</strong>
+          <ul style="list-style: none; padding: 0;" class="car-details">
+            <li style="margin-bottom: 5px;"><strong>Vehicle:</strong> {{ car.vehicle }}</li>
+            <li style="margin-bottom: 5px;"><strong>Year:</strong> {{ car.year }}</li>
+            <li style="margin-bottom: 5px;"><strong>Color:</strong> {{ car.color }}</li>
+            <li style="margin-bottom: 5px;"><strong>Price:</strong> {{ car.price }}</li>
+            <li style="margin-bottom: 5px;"><strong>Condition:</strong> {{ car.condition }}</li>
+          </ul>
+          {% if car.photo1 %}
+            <img style="max-width: 100%; height: auto; margin-top: 10px; max-width: 150px;" class="car-photo" src="data:image/jpeg;base64,{{ car.photo1 }}" alt="Photo 1">
+          {% endif %}
+          {% if car.photo2 %}
+            <img style="max-width: 100%; height: auto; margin-top: 10px; max-width: 150px;" class="car-photo" src="data:image/jpeg;base64,{{ car.photo2 }}" alt="Photo 2">
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+
+    <nav aria-label="Page navigation">
+      <ul style="list-style: none; padding: 0;" class="pagination">
+        {% for page_num in range(1, total_pages + 1) %}
+          <li style="display: inline-block; margin-right: 5px;" class="page-item {% if page_num == current_page %}active{% endif %}">
+            <a style="text-decoration: none; padding: 5px 10px; background-color: #f5f5f5; border: 1px solid #ddd; color: #333;" class="page-link" href="{{ url_for('vehicles', page=page_num) }}">{{ page_num }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    </nav>
+  {% else %}
+    <p>No car data available.</p>
+  {% endif %}
+{% endblock %}

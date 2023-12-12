@@ -147,7 +147,11 @@ def location():
 @app.route('/vehicles', methods=['GET'])
 def vehicles():
     # Make a request to the API endpoint (/api/cars)
+<<<<<<< Updated upstream
     api_url = 'http://localhost:5000/api/cars'  
+=======
+    api_url = 'http://localhost:3000/api/cars'
+>>>>>>> Stashed changes
     page = request.args.get('page', default=1, type=int)
     per_page = request.args.get('per_page', default=10, type=int)
 
@@ -162,7 +166,7 @@ def vehicles():
         total_pages = api_data.get('total_pages', 1)
         current_page = api_data.get('current_page', 1)
     else:
-        # If the API request fails, handle the error (e.g., show an error page)
+        # If the API request fails, handle the error
         return render_template('error.html', error_message='Failed to fetch data from the API')
 
     # Render the template using data from the API

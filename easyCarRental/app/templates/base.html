@@ -22,6 +22,7 @@
             <a href="{{ url_for('location') }}">location</a>
             <a href="{{ url_for('VehicelRegistration') }}">VehicelRegistration</a>
             <a href="{{ url_for('about') }}">ABOUT</a>
+            
 
             {% if current_user.is_anonymous %}
             <a href="{{ url_for('login') }}">Admin login</a>

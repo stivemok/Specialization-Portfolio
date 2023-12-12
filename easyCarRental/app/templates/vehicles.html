@@ -16,10 +16,10 @@
             <li style="margin-bottom: 5px;"><strong>Condition:</strong> {{ car.condition }}</li>
           </ul>
           {% if car.photo1 %}
-            <img style="max-width: 100%; height: auto; margin-top: 10px; max-width: 150px;" class="car-photo" src="data:image/jpeg;base64,{{ car.photo1 }}" alt="Photo 1">
+            <img style="max-width: 100%; height: auto; margin-top: 10px; max-width: 200px;" class="car-photo" src="data:image/jpeg;base64,{{ car.photo1 }}" alt="Photo 1">
           {% endif %}
           {% if car.photo2 %}
-            <img style="max-width: 100%; height: auto; margin-top: 10px; max-width: 150px;" class="car-photo" src="data:image/jpeg;base64,{{ car.photo2 }}" alt="Photo 2">
+            <img style="max-width: 100%; height: auto; margin-top: 10px; max-width: 200px;" class="car-photo" src="data:image/jpeg;base64,{{ car.photo2 }}" alt="Photo 2">
           {% endif %}
         </li>
       {% endfor %}

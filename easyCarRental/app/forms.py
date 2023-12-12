@@ -63,3 +63,21 @@ class VehicleSearchForm(FlaskForm):
     dropoff_location = SelectField('Drop-off Location', choices=[('Easy Rentals Office', 'Easy Rentals Office'), ('ADD Airport', 'ADD Airport')], validators=[DataRequired()])
     vehicle_type = SelectField('Vehicle Type', choices=[('sedan', 'Sedan'), ('compact', 'Compact'), ('suv', 'SUV'), ('truck', 'Truck'), ('van', 'Van')], validators=[DataRequired()])
     submit = SubmitField('Search Vehicle')
+
+class CarInformationForm(FlaskForm):
+    make = StringField('Make', validators=[DataRequired()], render_kw={"required": True})
+    model = StringField('Model', validators=[DataRequired()], render_kw={"required": True})
+    year = IntegerField('Release Year', validators=[DataRequired()], render_kw={"min": "1900", "max": "2023", "required": True})
+    condition = StringField('Condition', validators=[DataRequired()], render_kw={"required": True})
+    color = StringField('Color', validators=[DataRequired()], render_kw={"required": True})
+    price = StringField('Price', validators=[DataRequired()], render_kw={"required": True})
+    photo1 = FileField('Photo 1', validators=[DataRequired()], render_kw={"accept": "image/*", "required": True})
+    photo2 = FileField('Photo 2', validators=[DataRequired()], render_kw={"accept": "image/*", "required": True})
+    PlateNo = StringField('PlateNo', validators=[DataRequired()], render_kw={"required": True})
+    vehicle = SelectField('Vehicle Type', choices=[('sedan', 'Sedan'), ('compact', 'Compact'), ('suv', 'SUV'), ('truck', 'Truck'), ('van', 'Van')], validators=[DataRequired()])
+    submit = SubmitField('Submit')
+
+
+class RemoveCarForm(FlaskForm):
+    selected_cars = BooleanField('Select', validators=[DataRequired()])
+    submit = SubmitField('Remove Selected Cars')

@@ -48,3 +48,20 @@ class FormData(db.Model):
     price = db.Column(db.String(255)) 
     condition = db.Column(db.String(255))
     submissionDate = db.Column(db.DateTime)
+
+
+# Define SQLAlchemy model class for the database table
+class Car(db.Model):
+    __tablename__ = 'vehicle'
+    VehicleId = db.Column(db.Integer, primary_key=True)
+    make = db.Column(db.String(255))
+    model = db.Column(db.String(255))
+    year = db.Column(db.Integer)
+    condition = db.Column(db.String(255))
+    price = db.Column(db.String(255))
+    color = db.Column(db.String(255))
+    photo1 = db.Column(db.LargeBinary((2**32)-1))
+    photo2 = db.Column(db.LargeBinary((2**32)-1))
+    PlateNo = db.Column(db.String(255))
+    vehicle = db.Column(db.String(255))
+    available = db.Column(db.Boolean, default=True)

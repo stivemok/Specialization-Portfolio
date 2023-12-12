@@ -4,9 +4,9 @@ from flask_login import login_user, logout_user, current_user, login_required
 import sqlalchemy as sa
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, CarRentalForm
-from app.models import User, FormData
+from app.models import User, FormData, Car
 from datetime import datetime
-from app.forms import VehicleSearchForm
+from app.forms import VehicleSearchForm, CarInformationForm
 from app.api.api_routes import get_cars
 import base64
 import requests
@@ -73,6 +73,10 @@ def VehicelRegistration():
         if existing_entry:
             flash('the car is already registered. Please register another', 'error')
         else:
+            # Read the photo data once
+            photo1_data = form.photo1.data.read()
+            photo2_data = form.photo2.data.read()
+
             # If no duplicate plate number, create a new entry in the database
             new_entry = FormData(
                 fname=form.fname.data,
@@ -84,8 +88,8 @@ def VehicelRegistration():
                 year=form.year.data,
                 idpassport=form.idpassport.data.read(),
                 carreg=form.carreg.data.read(),
-                photo1=form.photo1.data.read(),
-                photo2=form.photo2.data.read(),
+                photo1=photo1_data,
+                photo2=photo2_data,
                 PlateNo=form.PlateNo.data,
                 make=form.make.data,
                 model=form.model.data,
@@ -98,10 +102,35 @@ def VehicelRegistration():
             db.session.add(new_entry)
             db.session.commit()
 
+            # Check if a Car object with the same Plate number already exists in the Car table
+            existing_car = Car.query.filter_by(PlateNo=form.PlateNo.data).first()
+
+            if not existing_car:
+                # If a Car object with the same Plate number does not exist, create a new Car object with the form data
+                new_car = Car(
+                    make=form.make.data,
+                    model=form.model.data,
+                    year=form.year.data,
+                    condition=form.condition.data,
+                    color=form.color.data,
+                    price=form.price.data,
+                    photo1=photo1_data,
+                    photo2=photo2_data,
+                    PlateNo=form.PlateNo.data,
+                    vehicle=form.vehicle.data
+                )
+
+                db.session.add(new_car)
+                db.session.commit()
+
             flash('Successfully registered your car!', 'success')
             return redirect(url_for('VehicelRegistration'))
 
     return render_template("VehicelRegistration.html", title='VehicelRegistration', form=form)
+
+
+
+
 
 
 
@@ -118,7 +147,7 @@ def location():
 @app.route('/vehicles', methods=['GET'])
 def vehicles():
     # Make a request to the API endpoint (/api/cars)
-    api_url = 'http://localhost:3000/api/cars'  # Replace with the actual URL of your API
+    api_url = 'http://localhost:5000/api/cars'  
     page = request.args.get('page', default=1, type=int)
     per_page = request.args.get('per_page', default=10, type=int)
 
@@ -139,10 +168,75 @@ def vehicles():
     # Render the template using data from the API
     return render_template('vehicles.html', cars=cars, total_pages=total_pages, current_page=current_page)
 
-@app.route('/all_entries', methods=['GET'])
-def display_all_entries():
-    # Retrieve all entries from the database
-    all_entries = FormData.query.all()
+@app.route('/AddCar', methods=['GET', 'POST'])
+@login_required
+def AddCar():
+    form = CarInformationForm()
+    if form.validate_on_submit():
+         # Check if a Car object with the same Plate number already exists in the Car table
+            existing_car = Car.query.filter_by(PlateNo=form.PlateNo.data).first()
 
-    # Render the entries on a new page
-    return render_template("all_entries.html", title='All Entries', entries=all_entries)
+            if not existing_car:
+                # If a Car object with the same Plate number does not exist, create a new Car object with the form data
+                new_car = Car(
+                    make=form.make.data,
+                    model=form.model.data,
+                    year=form.year.data,
+                    condition=form.condition.data,
+                    color=form.color.data,
+                    price=form.price.data,
+                    photo1=form.photo1.data.read(),
+                    photo2=form.photo2.data.read(),
+                    PlateNo=form.PlateNo.data,
+                    vehicle=form.vehicle.data
+                )
+
+                db.session.add(new_car)
+                db.session.commit()
+
+            flash('Successfully add a car!', 'success')
+            return redirect(url_for('VehicelRegistration'))
+    return render_template('AddCar.html', title='add car', form=form)
+
+
+@app.route('/UserInfo')
+def UserInfo():
+    # Make a request to the API endpoint (/api/registrations)
+    api_url = 'http://localhost:5000/api/registrations'  # Update the API endpoint
+    page = request.args.get('page', default=1, type=int)
+    per_page = request.args.get('per_page', default=10, type=int)
+
+    # Include any necessary query parameters in the API request
+    api_params = {'page': page, 'per_page': per_page}
+    response = requests.get(api_url, params=api_params)
+
+    if response.status_code == 200:
+        # If the API request is successful, extract data from the JSON response
+        api_data = response.json()
+        registrations = api_data.get('registrations', [])
+        total_pages = api_data.get('pagination', {}).get('total_pages', 1)
+        current_page = api_data.get('pagination', {}).get('current_page', 1)
+    else:
+        # If the API request fails, handle the error (e.g., show an error page)
+        return render_template('error.html', error_message='Failed to fetch data from the API')
+
+    # Render the template using data from the API
+    return render_template('UserInfo.html', registrations=registrations, total_pages=total_pages, current_page=current_page)
+
+
+@app.route('/RemoveCar', methods=['GET', 'POST'])
+@login_required
+def RemoveCar():
+    form = RemoveCarForm()
+    page = request.args.get('page', 1, type=int)
+    cars = Car.query.paginate(page=page, per_page=5)
+    if form.validate_on_submit():
+        selected_cars = form.selected_cars.data
+        for plateNo in selected_cars:
+            car = Car.query.filter_by(PlateNo=plateNo).first()
+            if car:
+                db.session.delete(car)
+                db.session.commit()
+        flash('Successfully removed selected cars!', 'success')
+        return redirect(url_for('RemoveCar'))
+    return render_template('RemoveCar.html', title='remove car', form=form, cars=cars)

@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Remove Car</h1>
+  <form method="POST" action="{{ url_for('remove_car') }}">
+    {{ form.hidden_tag() }}
+    {% for car in cars.items %}
+      <div class="form-group">
+        {{ form.selected_cars.label(car.PlateNo) }}
+        {{ form.selected_cars(value=car.PlateNo) }}
+        <img src="{{ url_for('static', filename='photos/' + car.photo1) }}" alt="Car photo"><br>
+        <!-- Add additional car details here -->
+      </div>
+    {% endfor %}
+    <div class="form-group">
+      {{ form.submit }}
+    </div>
+  </form>
+  {% if cars.has_prev %}
+    <a href="{{ url_for('remove_car', page=cars.prev_num) }}">Previous</a>
+  {% endif %}
+  {% for page_num in cars.iter_pages() %}
+    {% if page_num %}
+      {% if cars.page == page_num %}
+        <a class="active" href="{{ url_for('remove_car', page=page_num) }}">{{ page_num }}</a>
+      {% else %}
+        <a href="{{ url_for('remove_car', page=page_num) }}">{{ page_num }}</a>
+      {% endif %}
+    {% else %}
+      ...
+    {% endif %}
+  {% endfor %}
+  {% if cars.has_next %}
+    <a href="{{ url_for('remove_car', page=cars.next_num) }}">Next</a>
+  {% endif %}
+{% endblock %}

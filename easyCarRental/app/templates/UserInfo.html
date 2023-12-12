@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2>car owner info</h2>
+
+  {% if registrations %}
+    <ul style="list-style: none; padding: 0;" class="registration-list">
+      {% for registration in registrations %}
+      <li style="margin-bottom: 20px; padding: 10px; border: 1px solid #ccc;  width: 30%;" class="registration-item">
+          <ul style="list-style: none; padding: 0;" class="registration-details">
+            <li style="margin-bottom: 5px;"><strong>First Name:</strong> {{ registration.fname }}</li>
+            <li style="margin-bottom: 5px;"><strong>Middle Name:</strong> {{ registration.mname }}</li>
+            <li style="margin-bottom: 5px;"><strong>Last Name:</strong> {{ registration.lname }}</li>
+            <li style="margin-bottom: 5px;"><strong>Phone:</strong> {{ registration.phone }}</li>
+            <li style="margin-bottom: 5px;"><strong>Email:</strong> {{ registration.email }}</li>
+            <li style="margin-bottom: 5px;"><strong>Make:</strong> {{ registration.make }}</li>
+            <li style="margin-bottom: 5px;"><strong>model:</strong> {{ registration.model }}</li>
+            <li style="margin-bottom: 5px;"><strong>Vehicle:</strong> {{ registration.vehicle }}</li>
+            <li style="margin-bottom: 5px;"><strong>Year:</strong> {{ registration.year }}</li>
+            <li style="margin-bottom: 5px;"><strong>Color:</strong> {{ registration.color }}</li>
+            <li style="margin-bottom: 5px;"><strong>Price:</strong> {{ registration.price }}</li>
+            <li style="margin-bottom: 5px;"><strong>Condition:</strong> {{ registration.condition }}</li>
+            <li style="margin-bottom: 5px;"><strong>Plate No:</strong> {{ registration.PlateNo }}</li>
+            <li style="margin-bottom: 5px;"><strong>Submission Date:</strong> {{ registration.submissionDate }}</li>
+          </ul>
+          {% if registration.carreg %}
+            <img style="max-width: 100%; height: auto; margin-top: 10px; max-width: 100px;" class="registration-photo" src="data:image/jpeg;base64,{{ registration.carreg }}" alt="Car Registration">
+          {% endif %}
+          {% if registration.idpassport %}
+            <img style="max-width: 100%; height: auto; margin-top: 10px; max-width: 100px;" class="registration-photo" src="data:image/jpeg;base64,{{ registration.idpassport }}" alt="ID/Passport">
+          {% endif %}
+        </li>
+      {% endfor %}
+    </ul>
+
+    <nav aria-label="Page navigation">
+      <ul style="list-style: none; padding: 0;" class="pagination">
+        {% for page_num in range(1, total_pages + 1) %}
+          <li style="display: inline-block; margin-right: 5px;" class="page-item {% if page_num == current_page %}active{% endif %}">
+            <a style="text-decoration: none; padding: 5px 10px; background-color: #f5f5f5; border: 1px solid #ddd; color: #333;" class="page-link" href="{{ url_for('vehicles', page=page_num) }}">{{ page_num }}</a>
+          </li>
+        {% endfor %}
+      </ul>
+    </nav>
+  {% else %}
+    <p>No registration data available.</p>
+  {% endif %}
+{% endblock %}

@@ -5,7 +5,7 @@
         {% if title %}
         <title>{{ title }} - easy</title>
         {% else %}
-        <title>Welcome to Easy car rental</title>
+        <title>Welcome to Easy Car Rental</title>
         {% endif %}
 
         <meta charset="UTF-8">
@@ -22,6 +22,7 @@
             <a href="{{ url_for('location') }}">location</a>
             <a href="{{ url_for('VehicelRegistration') }}">VehicelRegistration</a>
             <a href="{{ url_for('about') }}">ABOUT</a>
+            
 
             {% if current_user.is_anonymous %}
             <a href="{{ url_for('login') }}">Admin login</a>

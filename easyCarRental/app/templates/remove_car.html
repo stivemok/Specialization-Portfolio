@@ -6,9 +6,8 @@
     {{ form.hidden_tag() }}
     {% for car in cars.items %}
       <div class="form-group">
-        {{ form.selected_cars.label(car.PlateNo) }}
-        {{ form.selected_cars(value=car.PlateNo) }}
-        <img src="{{ url_for('static', filename='photos/' + car.photo1) }}" alt="Car photo"><br>
+        <input type="checkbox" name="selected_cars" value="{{ car.PlateNo }}">
+        <label>{{ car.PlateNo }} {{ car.model }}</label><br>
         <!-- Add additional car details here -->
       </div>
     {% endfor %}

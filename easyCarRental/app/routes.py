@@ -6,7 +6,7 @@ from app import app, db
 from app.forms import LoginForm, RegistrationForm, CarRentalForm
 from app.models import User, FormData, Car
 from datetime import datetime
-from app.forms import VehicleSearchForm, CarInformationForm
+from app.forms import VehicleSearchForm, CarInformationForm, RemoveCarForm, CarUpdateForm
 from app.api.api_routes import get_cars
 import base64
 import requests
@@ -147,11 +147,8 @@ def location():
 @app.route('/vehicles', methods=['GET'])
 def vehicles():
     # Make a request to the API endpoint (/api/cars)
-<<<<<<< Updated upstream
-    api_url = 'http://localhost:5000/api/cars'  
-=======
     api_url = 'http://localhost:3000/api/cars'
->>>>>>> Stashed changes
+
     page = request.args.get('page', default=1, type=int)
     per_page = request.args.get('per_page', default=10, type=int)
 
@@ -206,7 +203,7 @@ def AddCar():
 @app.route('/UserInfo')
 def UserInfo():
     # Make a request to the API endpoint (/api/registrations)
-    api_url = 'http://localhost:5000/api/registrations'  # Update the API endpoint
+    api_url = 'http://localhost:3000/api/registrations'  # Update the API endpoint
     page = request.args.get('page', default=1, type=int)
     per_page = request.args.get('per_page', default=10, type=int)
 
@@ -228,12 +225,13 @@ def UserInfo():
     return render_template('UserInfo.html', registrations=registrations, total_pages=total_pages, current_page=current_page)
 
 
-@app.route('/RemoveCar', methods=['GET', 'POST'])
+@app.route('/remove_car', methods=['GET', 'POST'])
 @login_required
-def RemoveCar():
+def remove_car():
     form = RemoveCarForm()
     page = request.args.get('page', 1, type=int)
     cars = Car.query.paginate(page=page, per_page=5)
+    form.selected_cars.choices = [(car.PlateNo, car.PlateNo + ' ' + car.model) for car in cars.items]
     if form.validate_on_submit():
         selected_cars = form.selected_cars.data
         for plateNo in selected_cars:
@@ -242,5 +240,37 @@ def RemoveCar():
                 db.session.delete(car)
                 db.session.commit()
         flash('Successfully removed selected cars!', 'success')
-        return redirect(url_for('RemoveCar'))
-    return render_template('RemoveCar.html', title='remove car', form=form, cars=cars)
+        return redirect(url_for('remove_car'))
+    return render_template('remove_car.html', title='remove car', form=form, cars=cars)
+
+
+
+
+@app.route('/UpdateCar', methods=['GET', 'POST'])
+@login_required
+def UpdateCar():
+    form = CarUpdateForm()
+
+    # Fetch all available cars
+    cars = Car.query.all()
+
+    if form.validate_on_submit():
+        # Fetch the selected car by its PlateNo
+        selected_plate_no = form.plate_no.data
+        selected_car = Car.query.filter_by(PlateNo=selected_plate_no).first_or_404()
+
+        # Update the selected car with the form data
+        form.populate_obj(selected_car)
+
+        # Handle photo updates if needed
+        if form.photo1.data:
+            selected_car.photo1 = form.photo1.data.read()
+        if form.photo2.data:
+            selected_car.photo2 = form.photo2.data.read()
+
+        db.session.commit()
+
+        flash('Car updated successfully!', 'success')
+        return redirect(url_for('UpdateCar'))
+
+    return render_template('UpdateCar.html', title='Update Car', form=form, cars=cars)

@@ -5,6 +5,7 @@ import sqlalchemy as sa
 from app import db
 from app.models import User
 from wtforms import DateField
+from wtforms import SelectMultipleField
 
 
 class LoginForm(FlaskForm):
@@ -79,5 +80,19 @@ class CarInformationForm(FlaskForm):
 
 
 class RemoveCarForm(FlaskForm):
-    selected_cars = BooleanField('Select', validators=[DataRequired()])
+    selected_cars = SelectMultipleField('Select Cars', coerce=str)
     submit = SubmitField('Remove Selected Cars')
+
+
+class CarUpdateForm(FlaskForm):
+    plate_no = StringField('Plate Number', validators=[DataRequired()])
+    make = StringField('Make', validators=[DataRequired()])
+    model = StringField('Model', validators=[DataRequired()])
+    year = IntegerField('Year', validators=[DataRequired()])
+    condition = StringField('Condition', validators=[DataRequired()])
+    color = StringField('Color', validators=[DataRequired()])
+    price = StringField('Price', validators=[DataRequired()])
+    vehicle = StringField('Vehicle', validators=[DataRequired()])
+    photo1 = FileField('Photo 1')
+    photo2 = FileField('Photo 2')
+    submit = SubmitField('Update Car')

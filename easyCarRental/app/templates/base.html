@@ -1,6 +1,35 @@
 <!doctype html>
 
 <html>
+    <style>
+        header {
+            background-color: rgb(0, 204, 255);
+            color: darkblue;
+            padding: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-width: 20px;
+            border-radius: 20px;
+        }
+        
+        nav ul {
+            list-style: none;
+            display: flex;
+        }
+
+        nav li {
+            margin-right: 20px;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: darkblue;
+        }
+        a:hover {
+            background-color: blueviolet;
+        }
+    </style>
     <head>
         {% if title %}
         <title>{{ title }} - easy</title>
@@ -15,22 +44,24 @@
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/index.css') }}">
     </head>
     <body>
-        <div>
-            EASY CAR RENTAL:
-            <a href="{{ url_for('index') }}">HOME</a>
-            <a href="{{ url_for('vehicles') }}">vehicles</a>
-            <a href="{{ url_for('location') }}">location</a>
-            <a href="{{ url_for('VehicelRegistration') }}">VehicelRegistration</a>
-            <a href="{{ url_for('about') }}">ABOUT</a>
-            
-
-            {% if current_user.is_anonymous %}
-            <a href="{{ url_for('login') }}">Admin login</a>
-            {% else %}
-            <a href="{{ url_for('logout') }}">Logout</a>
-            {% endif %}
-        </div>
-        <hr>
+        <header>
+            <h1>EASY CAR RENTAL</h1>
+            <nav>
+                <ul>
+                    <li><a href="{{ url_for('index') }}">Home</a></li>
+                    <li><a href="{{ url_for('vehicles') }}">Vehicles</a></li>
+                    <li><a href="{{ url_for('location') }}">Location</a></li>
+                    <li><a href="{{ url_for('VehicelRegistration') }}">Vehicel Registration</a></li>
+                    <li><a href="{{ url_for('about') }}">About</a></li>
+        
+                    {% if current_user.is_anonymous %}
+                    <li><a href="{{ url_for('login') }}">Admin Login</a></li>
+                    {% else %}
+                    <li><a href="{{ url_for('logout') }}">Log Out</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        </header>
 
         {% with messages = get_flashed_messages() %}
         {% if messages %}

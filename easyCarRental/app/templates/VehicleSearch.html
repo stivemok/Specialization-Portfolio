@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container">
+        <h2>Vehicle Details</h2>
+        {% if cars %}
+            <ul style="list-style: none; padding: 0;" class="car-list">
+                {% for car in cars %}
+                    <li style="margin-bottom: 20px; padding: 10px; border: 1px solid #ccc;" class="car-item">
+                        <h3>{{ car.make }} {{ car.model }}</h3>
+                        <p>Year: {{ car.year }}</p>
+                        <p>Condition: {{ car.condition }}</p>
+                        <p>Price: {{ car.price }}</p>
+                        <p>Color: {{ car.color }}</p>
+                        <p>Vehicle Type: {{ car.vehicle }}</p>
+                        {% if car.photo1 %}
+                            <img style="max-width: 100%; height: auto; margin-top: 10px; max-width: 200px;" class="car-photo" src="data:image/jpeg;base64,{{ car.photo1 }}" alt="Photo 1">
+                        {% endif %}
+                        {% if car.photo2 %}
+                            <img style="max-width: 100%; height: auto; margin-top: 10px; max-width: 200px;" class="car-photo" src="data:image/jpeg;base64,{{ car.photo2 }}" alt="Photo 2">
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+            <div class="pagination">
+                {% if current_page > 1 %}
+                    <a href="{{ url_for('SearchVehicle', page=current_page-1) }}">Previous</a>
+                {% endif %}
+                {% for page_num in range(1, total_pages+1) %}
+                    {% if page_num == current_page %}
+                        <span class="current-page">{{ page_num }}</span>
+                    {% else %}
+                        <a href="{{ url_for('SearchVehicle', page=page_num) }}">{{ page_num }}</a>
+                    {% endif %}
+                {% endfor %}
+                {% if current_page < total_pages %}
+                    <a href="{{ url_for('SearchVehicle', page=current_page+1) }}">Next</a>
+                {% endif %}
+            </div>
+        {% else %}
+            <p>No vehicle found.</p>
+        {% endif %}
+    </div>
+{% endblock %}

@@ -4,12 +4,15 @@ from flask_login import login_user, logout_user, current_user, login_required
 import sqlalchemy as sa
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, CarRentalForm
-from app.models import User, FormData, Car
+from app.models import User, FormData, Car, Booking, VehicleCount
 from datetime import datetime
-from app.forms import VehicleSearchForm, CarInformationForm, RemoveCarForm, CarUpdateForm
+from app.forms import VehicleSearchForm, CarInformationForm, RemoveCarForm, CarUpdateForm 
+from app.forms import BookVehicleForm
 from app.api.api_routes import get_cars
+from flask import jsonify
 import base64
 import requests
+import logging
 
 
 @app.route('/')
@@ -102,26 +105,7 @@ def VehicelRegistration():
             db.session.add(new_entry)
             db.session.commit()
 
-            # Check if a Car object with the same Plate number already exists in the Car table
-            existing_car = Car.query.filter_by(PlateNo=form.PlateNo.data).first()
-
-            if not existing_car:
-                # If a Car object with the same Plate number does not exist, create a new Car object with the form data
-                new_car = Car(
-                    make=form.make.data,
-                    model=form.model.data,
-                    year=form.year.data,
-                    condition=form.condition.data,
-                    color=form.color.data,
-                    price=form.price.data,
-                    photo1=photo1_data,
-                    photo2=photo2_data,
-                    PlateNo=form.PlateNo.data,
-                    vehicle=form.vehicle.data
-                )
-
-                db.session.add(new_car)
-                db.session.commit()
+            
 
             flash('Successfully registered your car!', 'success')
             return redirect(url_for('VehicelRegistration'))
@@ -174,31 +158,39 @@ def vehicles():
 def AddCar():
     form = CarInformationForm()
     if form.validate_on_submit():
-         # Check if a Car object with the same Plate number already exists in the Car table
-            existing_car = Car.query.filter_by(PlateNo=form.PlateNo.data).first()
+        existing_car = Car.query.filter_by(PlateNo=form.PlateNo.data).first()
+        if existing_car:
+            flash('This car is already registered!', 'error')
+            return render_template('AddCar.html', title='add car', form=form)
 
-            if not existing_car:
-                # If a Car object with the same Plate number does not exist, create a new Car object with the form data
-                new_car = Car(
-                    make=form.make.data,
-                    model=form.model.data,
-                    year=form.year.data,
-                    condition=form.condition.data,
-                    color=form.color.data,
-                    price=form.price.data,
-                    photo1=form.photo1.data.read(),
-                    photo2=form.photo2.data.read(),
-                    PlateNo=form.PlateNo.data,
-                    vehicle=form.vehicle.data
-                )
+        new_car = Car(
+            make=form.make.data,
+            model=form.model.data,
+            year=form.year.data,
+            condition=form.condition.data,
+            color=form.color.data,
+            price=form.price.data,
+            photo1=form.photo1.data.read(),
+            photo2=form.photo2.data.read(),
+            PlateNo=form.PlateNo.data,
+            vehicle=form.vehicle.data
+        )
 
-                db.session.add(new_car)
-                db.session.commit()
+        db.session.add(new_car)
 
-            flash('Successfully add a car!', 'success')
-            return redirect(url_for('VehicelRegistration'))
+        vehicle_count = VehicleCount.query.filter_by(vehicle_type=new_car.vehicle).first()
+        if not vehicle_count:
+            vehicle_count = VehicleCount(vehicle_type=new_car.vehicle, count=1)
+            db.session.add(vehicle_count)
+        else:
+            vehicle_count.count += 1
+
+        db.session.commit()
+
+        flash('Successfully added a car!', 'success')
+        return redirect(url_for('AddCar'))
+
     return render_template('AddCar.html', title='add car', form=form)
-
 
 @app.route('/UserInfo')
 def UserInfo():
@@ -237,12 +229,17 @@ def remove_car():
         for plateNo in selected_cars:
             car = Car.query.filter_by(PlateNo=plateNo).first()
             if car:
+                vehicle_count = VehicleCount.query.filter_by(vehicle_type=car.vehicle).first()
+                if vehicle_count and vehicle_count.count > 0:
+                    vehicle_count.count -= 1
+
                 db.session.delete(car)
-                db.session.commit()
+
+        db.session.commit()
+
         flash('Successfully removed selected cars!', 'success')
         return redirect(url_for('remove_car'))
     return render_template('remove_car.html', title='remove car', form=form, cars=cars)
-
 
 
 
@@ -274,3 +271,165 @@ def UpdateCar():
         return redirect(url_for('UpdateCar'))
 
     return render_template('UpdateCar.html', title='Update Car', form=form, cars=cars)
+
+
+@app.route('/SearchVehicle', methods=['GET', 'POST'])
+def SearchVehicle():
+    form = VehicleSearchForm()
+
+    if form.validate_on_submit():
+        # Get the vehicle type from the form
+        vehicle_type = form.vehicle_type.data
+
+        # Query the database for the vehicle
+        page = request.args.get('page', 1, type=int)
+        per_page = 10
+        vehicles = Car.query.filter(Car.vehicle.ilike(f"%{vehicle_type}%")).paginate(page=page, per_page=per_page)
+
+        if vehicles.items:
+            vehicles_list = []
+            for vehicle in vehicles.items:
+                try:
+                    # Convert the binary data to an image file
+                    photo1_base64 = base64.b64encode(vehicle.photo1).decode('utf-8') if vehicle.photo1 else None
+                    photo2_base64 = base64.b64encode(vehicle.photo2).decode('utf-8') if vehicle.photo2 else None
+
+                    # Create a dictionary with vehicle details
+                    vehicle_details = {
+                        'vehicle': vehicle.vehicle,
+                        'year': vehicle.year,
+                        'make': vehicle.make,
+                        'model': vehicle.model,
+                        'color': vehicle.color,
+                        'price': vehicle.price,
+                        'condition': vehicle.condition,
+                        'photo1': photo1_base64,
+                        'photo2': photo2_base64,
+                    }
+                    vehicles_list.append(vehicle_details)
+                except Exception as e:
+                    logging.error(f"Error encoding photos for vehicle {vehicle.VehicleId}: {e}")
+
+            result = {
+                'vehicles': vehicles_list,
+                'total_pages': vehicles.pages,
+                'current_page': vehicles.page,
+                'per_page': vehicles.per_page,
+                'total_vehicles': vehicles.total
+            }
+
+            return render_template('VehicleSearch.html', title='Search Vehicle', form=form, cars=result['vehicles'], total_pages=result['total_pages'], current_page=result['current_page'])
+
+        else:
+            # Vehicle not found
+            flash('No vehicle found! Please check these cars.', 'info')
+            return redirect(url_for('vehicles'))
+
+    return render_template('VehicleSearch.html', title='Search Vehicle', form=form)
+
+
+@app.route('/BookVehicle', methods=['GET', 'POST'])
+def BookVehicle():
+    form = BookVehicleForm()
+    if form.validate_on_submit():
+
+        idpassport_data = form.idpassport.data.read()
+
+        # Check if the vehicle is already booked
+        existing_booking = Booking.query.filter(
+            Booking.vehicle_type == form.vehicle_type.data,
+            Booking.pickup_date <= form.dropoff.data,
+            Booking.dropoff_date >= form.pickup.data
+        ).first()
+
+        # Check if the vehicle count is not zero
+        vehicle_count = VehicleCount.query.filter_by(vehicle_type=form.vehicle_type.data).first()
+
+        if existing_booking or (vehicle_count and vehicle_count.count == 0):
+            flash('The car is booked. Please check another vehicle or date.')
+            return redirect(url_for('BookVehicle'))  # Redirect back to the booking page
+        else:
+            # Book the vehicle
+            booking = Booking(
+                pickup_date=form.pickup.data,
+                pickup_location=form.pickup_location.data,
+                dropoff_date=form.dropoff.data,
+                dropoff_location=form.dropoff_location.data,
+                vehicle_type=form.vehicle_type.data,
+                fname=form.fname.data,
+                mname=form.mname.data,
+                lname=form.lname.data,
+                idpassport=idpassport_data,
+                PaymentMethod=form.PaymentMethod.data
+            )
+            db.session.add(booking)
+
+            # Decrease the vehicle count
+            vehicle_count.count -= 1
+
+            db.session.commit()
+            flash('Successfully booked')
+
+    return render_template('BookVehicle.html', form=form)
+
+@app.route('/vehicle_count', methods=['GET'])
+@login_required
+def vehicle_count():
+    counts = VehicleCount.query.all()
+    return render_template('vehicle_count.html', title='Avaliable Vehicles', counts=counts)
+
+
+@app.route('/BookedVehicle', methods=['GET', 'POST'])
+def BookedVehicle():
+    if request.method == 'POST':
+        # Get the list of booking IDs from the form submission
+        booking_ids = request.form.getlist('booking_ids')
+
+        # Delete the selected bookings from the database
+        Booking.query.filter(Booking.id.in_(booking_ids)).delete(synchronize_session=False)
+        db.session.commit()
+
+        # Redirect back to the BookedVehicle page
+        return redirect(url_for('BookedVehicle'))
+
+    # Get the page number from the request arguments
+    page = request.args.get('page', 1, type=int)
+    per_page = 10
+
+    # Query the database for all bookings
+    bookings = Booking.query.paginate(page=page, per_page=per_page)
+
+    bookings_list = []
+    for booking in bookings.items:
+        try:
+            # Convert the binary data to an image file
+            idpassport_base64 = base64.b64encode(booking.idpassport).decode('utf-8') if booking.idpassport else None
+
+            # Create a dictionary with booking details
+            booking_details = {
+                'id': booking.id,
+                'pickup_date': booking.pickup_date,
+                'pickup_location': booking.pickup_location,
+                'dropoff_date': booking.dropoff_date,
+                'dropoff_location': booking.dropoff_location,
+                'vehicle_type': booking.vehicle_type,
+                'fname': booking.fname,
+                'mname': booking.mname,
+                'lname': booking.lname,
+                'idpassport': idpassport_base64,
+                'PaymentMethod': booking.PaymentMethod,
+            }
+            bookings_list.append(booking_details)
+        except Exception as e:
+            logging.error(f"Error encoding passport for booking {booking.id}: {e}")
+
+    result = {
+        'bookings': bookings_list,
+        'total_pages': bookings.pages,
+        'current_page': bookings.page,
+        'per_page': bookings.per_page,
+        'total_bookings': bookings.total
+    }
+
+    return render_template('BookedVehicle.html', title='Booked Vehicle', bookings=result['bookings'], total_pages=result['total_pages'], current_page=result['current_page'])
+

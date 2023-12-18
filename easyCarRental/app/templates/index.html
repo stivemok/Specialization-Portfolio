@@ -15,34 +15,21 @@
         </div>
 
 
-       <!-- Vehicle booking form -->
-       <section class="booking-form container">
-        <h2>Search a Vehicle</h2>
-        <form action="/search-vehicle" method="POST" id="bookingForm">
-        <label for="pickup">Pick-up Date:</label><br>
-        <input type="date" id="pickup-date" name="pickup" required pattern="\d{4}-\d{2}-\d{2}"><br>
-        <label for="dropdown">Pickup Location</label><br>
-        <select id="pickup-location">
-            <option value="Easy Rentals Office">Easy Rentals Office</option>
-            <option value="ADD Airport">ADD Airport</option>
-        </select><br>
-        <label for="dropoff">Drop-off Date</label><br>
-        <input type="date" id="dropoff-date" name="dropoff" required pattern="\d{4}-\d{2}-\d{2}"><br>
-        <label for="dropdown">Drop-off Location</label><br>
-        <select id="dropoff-location">
-            <option value="Easy Rentals Office">Easy Rentals Office</option>
-            <option value="ADD Airport">ADD Airport</option><br>
-        </select><br>
-        <label for="vehicle">Vehicle Type:</label><br>
-        <select id="vehicle" name="vehicle">
-          <option value="sedan">Sedan</option>
-          <option value="compact">Compact</option>
-          <option value="suv">SUV</option>
-          <option value="truck">Truck</option>
-          <option value="van">Van</option>
-        </select>
-     <button type="submit" class="btn btn-primary">Search Vehicle</button>
-      </section>
+        <!-- Vehicle searching form -->
+    <section class="booking-form container">
+      <h2>Search a Vehicle</h2>
+
+      <form method="POST" action="{{ url_for('SearchVehicle') }}" enctype="multipart/form-data">
+        {{ form.hidden_tag() }}
+    
+        
+        {{ form.vehicle_type.label }}
+        {{ form.vehicle_type(id="vehicle") }}
+    
+    
+          <button type="submit" class="btn btn-primary">Search Vehicle</button>
+      </form>
+  </section>
   </body>
     
   <footer>

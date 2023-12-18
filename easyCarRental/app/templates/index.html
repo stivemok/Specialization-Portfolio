@@ -3,14 +3,19 @@
 {% block content %}
         <div class="carousel">
             <div class="slides">
-                <img src="../static/css/cars/compact/swift 1.jpg" alt="swift">
-                <img src="../static/css/cars/compact/swift 2.jfif" alt="swift">
-                <img src="../static/css/cars/sedan/Suzuki dezier 1.jpg" alt="dezier">
-                <img src="../static/css/cars/sedan/Suzuki dezier 2.jpg" alt="dezier">
-                <img src="../static/css/cars/sedan/Toyota camrey.jpg" alt="camrey">
-                <img src="../static/css/cars/suv/tuson 2.png" alt="tucson">
-                <img src="../static/css/cars/suv/land cruser 1.jfif" alt="Land cruser">
-                <img src="../static/css/cars/suv/land cruser 2.png" alt="Land cruser">
+                <img src="../static/css/cars/carousel/Mercediz.jpg" alt="Mercedic">
+                <img src="../static/css/cars/carousel/land cruser 1.jfif" alt="Toyota v8">
+                <img src="../static/css/cars/carousel/Elantra grey 2.jpg" alt="Elantra">
+                <img src="../static/css/cars/carousel/VW ID.6.webp" alt="VW ID.6">
+                <img src="../static/css/cars/carousel/Tacoma.png" alt="Tacoma">
+                <img src="../static/css/cars/carousel/Honda-HR-V 1.jpg" alt="Honda-HR-V">
+                <img src="../static/css/cars/carousel/Toyota camrey.jpg" alt="Toyota camrey">
+                <img src="../static/css/cars/carousel/Toyota Fortuner.jfif" alt="Toyota Fortuner">
+                <img src="../static/css/cars/carousel/Honda-HR-V 2.jpg" alt="Honda-HR-V">
+                <img src="../static/css/cars/carousel/Toyota CRV.jpg" alt="Toyota CRV">
+                <img src="../static/css/cars/carousel/F150 Silver.png" alt="Ford 150">
+                
+                 
             </div>
         </div>
 
@@ -19,28 +24,43 @@
        <section class="booking-form container">
         <h2>Search a Vehicle</h2>
         <form action="/search-vehicle" method="POST" id="bookingForm">
-        <label for="pickup">Pick-up Date:</label><br>
-        <input type="date" id="pickup-date" name="pickup" required pattern="\d{4}-\d{2}-\d{2}"><br>
-        <label for="dropdown">Pickup Location</label><br>
+        <!-- <label for="pickup">Pick-up Date:</label>
+        <input type="date" id="pickup-date" name="pickup" required pattern="\d{4}-\d{2}-\d{2}">
+        <label for="dropdown">Pickup Location</label>
         <select id="pickup-location">
             <option value="Easy Rentals Office">Easy Rentals Office</option>
             <option value="ADD Airport">ADD Airport</option>
         </select><br>
-        <label for="dropoff">Drop-off Date</label><br>
-        <input type="date" id="dropoff-date" name="dropoff" required pattern="\d{4}-\d{2}-\d{2}"><br>
-        <label for="dropdown">Drop-off Location</label><br>
+        <label for="dropoff">Drop-off Date</label>
+        <input type="date" id="dropoff-date" name="dropoff" required pattern="\d{4}-\d{2}-\d{2}">
+        <label for="dropdown">Drop-off Location</label>
         <select id="dropoff-location">
             <option value="Easy Rentals Office">Easy Rentals Office</option>
             <option value="ADD Airport">ADD Airport</option><br>
-        </select><br>
-        <label for="vehicle">Vehicle Type:</label><br>
-        <select id="vehicle" name="vehicle">
+        </select><br> -->
+        <!-- <label for="vehicle">Vehicle Type</label> -->
+        <input type="checkbox" id="sedan">
+        <label for="sedan">Sedan</label><br>
+        <img src="../static/css/cars/icons/sedan1.png" alt="sedan" style="width: 30%; height: 30%; display: flex; margin: auto; margin-top: -80px;"><br><br>
+        <input type="checkbox" id="compact">
+        <label for="compact">Compact</label>
+        <img src="../static/css/cars/icons/compact.jpg" alt="compact" style="width: 30%; height: 30%; display: flex; margin: auto; margin-top: -75px;"><br>
+        <input type="checkbox" id="suv">
+        <label for="suv">SUV</label><br>
+        <img src="../static/css/cars/icons/suv3.png" alt="suv" style="width: 30%; height: 30%; display: flex; margin: auto; margin-top: -100px;"><br>
+        <input type="checkbox" id="van">
+        <label for="van">VAN</label><br>
+        <img src="../static/css/cars/icons/van1.png" alt="van" style="width: 45%; height: 45%; display: flex; margin: auto; margin-top: -80px;"><br>
+        <input type="checkbox" id="truck">
+        <label for="truck">Truck</label><br>
+        <img src="../static/css/cars/icons/truck.jfif" alt="truck" style="width: 27%; height: 27%; display: flex; margin: auto; margin-top: -50px;"><br>
+        <!-- <select id="vehicle" name="vehicle">
           <option value="sedan">Sedan</option>
           <option value="compact">Compact</option>
           <option value="suv">SUV</option>
           <option value="truck">Truck</option>
           <option value="van">Van</option>
-        </select>
+        </select> -->
      <button type="submit" class="btn btn-primary">Search Vehicle</button>
       </section>
   </body>

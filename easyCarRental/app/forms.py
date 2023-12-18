@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, FileField, SelectField, IntegerField
-from wtforms.validators import ValidationError, DataRequired, Email, EqualTo
+from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length
 import sqlalchemy as sa
 from app import db
 from app.models import User
@@ -58,10 +58,6 @@ class CarRentalForm(FlaskForm):
 
 
 class VehicleSearchForm(FlaskForm):
-    pickup_date = DateField('Pick-up Date', validators=[DataRequired()], format='%Y-%m-%d')
-    pickup_location = SelectField('Pickup Location', choices=[('Easy Rentals Office', 'Easy Rentals Office'), ('ADD Airport', 'ADD Airport')], validators=[DataRequired()])
-    dropoff_date = DateField('Drop-off Date', validators=[DataRequired()], format='%Y-%m-%d')
-    dropoff_location = SelectField('Drop-off Location', choices=[('Easy Rentals Office', 'Easy Rentals Office'), ('ADD Airport', 'ADD Airport')], validators=[DataRequired()])
     vehicle_type = SelectField('Vehicle Type', choices=[('sedan', 'Sedan'), ('compact', 'Compact'), ('suv', 'SUV'), ('truck', 'Truck'), ('van', 'Van')], validators=[DataRequired()])
     submit = SubmitField('Search Vehicle')
 
@@ -96,3 +92,16 @@ class CarUpdateForm(FlaskForm):
     photo1 = FileField('Photo 1')
     photo2 = FileField('Photo 2')
     submit = SubmitField('Update Car')
+
+class BookVehicleForm(FlaskForm):
+    fname = StringField('First Name', validators=[DataRequired(), Length(max=32)])
+    mname = StringField('Middle Name', validators=[DataRequired(), Length(max=32)])
+    lname = StringField('Last Name', validators=[DataRequired(), Length(max=32)])
+    idpassport = FileField('ID/Passport', validators=[DataRequired()], render_kw={"accept": "image/*", "required": True})
+    pickup = DateField('Pickup Date', format='%Y-%m-%d', validators=[DataRequired()])
+    pickup_location = SelectField('Pickup Location', choices=[('Easy Rentals Office', 'Easy Rentals Office'), ('ADD Airport', 'ADD Airport')], validators=[DataRequired()])
+    dropoff = DateField('Dropoff Date', format='%Y-%m-%d', validators=[DataRequired()])
+    dropoff_location = SelectField('Drop-off Location', choices=[('Easy Rentals Office', 'Easy Rentals Office'), ('ADD Airport', 'ADD Airport')], validators=[DataRequired()])
+    vehicle_type = SelectField('Vehicle Type', choices=[('sedan', 'Sedan'), ('compact', 'Compact'), ('suv', 'SUV'), ('truck', 'Truck'), ('van', 'Van')], validators=[DataRequired()])
+    PaymentMethod = StringField('Payment Method', validators=[DataRequired(), Length(max=32)])
+    submit = SubmitField('Book Vehicle')

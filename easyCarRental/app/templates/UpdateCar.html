@@ -27,6 +27,7 @@
     {% if form.plate_no.data %}
       {% set selected_car = cars | selectattr('PlateNo', 'equalto', form.plate_no.data) | first %}
 
+      
       <div class="form-group">
         {{ form.plate_no.label }}
         {{ form.plate_no(class="form-control", readonly="readonly", value=selected_car.PlateNo) }}

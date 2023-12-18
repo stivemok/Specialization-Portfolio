@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h2>car owner info</h2>
+  <h2>Car Owner Info</h2>
 
   {% if registrations %}
     <ul style="list-style: none; padding: 0;" class="registration-list">
@@ -14,7 +14,7 @@
             <li style="margin-bottom: 5px;"><strong>Phone:</strong> {{ registration.phone }}</li>
             <li style="margin-bottom: 5px;"><strong>Email:</strong> {{ registration.email }}</li>
             <li style="margin-bottom: 5px;"><strong>Make:</strong> {{ registration.make }}</li>
-            <li style="margin-bottom: 5px;"><strong>model:</strong> {{ registration.model }}</li>
+            <li style="margin-bottom: 5px;"><strong>Model:</strong> {{ registration.model }}</li>
             <li style="margin-bottom: 5px;"><strong>Vehicle:</strong> {{ registration.vehicle }}</li>
             <li style="margin-bottom: 5px;"><strong>Year:</strong> {{ registration.year }}</li>
             <li style="margin-bottom: 5px;"><strong>Color:</strong> {{ registration.color }}</li>
@@ -24,12 +24,34 @@
             <li style="margin-bottom: 5px;"><strong>Submission Date:</strong> {{ registration.submissionDate }}</li>
           </ul>
           {% if registration.carreg %}
-            <img style="max-width: 100%; height: auto; margin-top: 10px; max-width: 100px;" class="registration-photo" src="data:image/jpeg;base64,{{ registration.carreg }}" alt="Car Registration">
+            <p><strong>Car Registration:</strong></p>
+            <a href="data:image/jpeg;base64,{{ registration.carreg }}" download>
+              <img style="max-width: 100%; height: auto; margin-top: 10px; max-width: 100px;" class="registration-photo" src="data:image/jpeg;base64,{{ registration.carreg }}" alt="Car Registration">
+              <p>Click here to download</p>
+            </a>
           {% endif %}
           {% if registration.idpassport %}
-            <img style="max-width: 100%; height: auto; margin-top: 10px; max-width: 100px;" class="registration-photo" src="data:image/jpeg;base64,{{ registration.idpassport }}" alt="ID/Passport">
+            <p><strong>ID/Passport:</strong></p>
+            <a href="data:image/jpeg;base64,{{ registration.idpassport }}" download>
+              <img style="max-width: 100%; height: auto; margin-top: 10px; max-width: 100px;" class="registration-photo" src="data:image/jpeg;base64,{{ registration.idpassport }}" alt="ID/Passport">
+              <p>Click here to download</p>
+            </a>
           {% endif %}
-        </li>
+          {% if registration.photo1 %}
+            <p><strong>Photo 1:</strong></p>
+            <a href="data:image/jpeg;base64,{{ registration.photo1 }}" download>
+              <img style="max-width: 100%; height: auto; margin-top: 10px; max-width: 100px;" class="registration-photo" src="data:image/jpeg;base64,{{ registration.photo1 }}" alt="Photo 1">
+              <p>Click here to download</p>
+            </a>
+          {% endif %}
+          {% if registration.photo2 %}
+            <p><strong>Photo 2:</strong></p>
+            <a href="data:image/jpeg;base64,{{ registration.photo2 }}" download>
+              <img style="max-width: 100%; height: auto; margin-top: 10px; max-width: 100px;" class="registration-photo" src="data:image/jpeg;base64,{{ registration.photo2 }}" alt="Photo 2">
+              <p>Click here to download</p>
+            </a>
+          {% endif %}
+      </li>
       {% endfor %}
     </ul>
 

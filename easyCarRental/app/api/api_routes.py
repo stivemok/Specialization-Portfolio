@@ -64,7 +64,9 @@ def get_registrations():
                 # Perform base64 encoding for specific fields
                 carreg_base64 = base64.b64encode(registration.carreg).decode('utf-8') if registration.carreg else None
                 idpassport_base64 = base64.b64encode(registration.idpassport).decode('utf-8') if registration.idpassport else None
-
+                photo1_base64 = base64.b64encode(registration.photo1).decode('utf-8') if registration.photo1 else None
+                photo2_base64 = base64.b64encode(registration.photo2).decode('utf-8') if registration.photo2 else None
+            
                 registrations_list.append({
                     'CustomerId': registration.CustomerId,
                     'fname': registration.fname,
@@ -83,6 +85,8 @@ def get_registrations():
                     'submissionDate': registration.submissionDate.strftime('%Y-%m-%d %H:%M:%S'),
                     'carreg': carreg_base64,
                     'idpassport': idpassport_base64,
+                    'photo1': photo1_base64,
+                    'photo2': photo2_base64,
                 })
             except Exception as e:
                 logging.error(f"Error encoding photos for registration {registration.CustomerId}: {e}")

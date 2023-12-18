@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>{{ title }}</h1>
+  <table>
+    <tr>
+      <th>Vehicle</th>
+      <th>NO</th>
+    </tr>
+    {% for count in counts %}
+    <tr>
+      <td>{{ count.vehicle_type }}</td>
+      <td>{{ count.count }}</td>
+    </tr>
+    {% endfor %}
+  </table>
+{% endblock %}

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <section class="booking-form container">
+        <h2>Book Vehicle</h2>
+
+        <form method="post" action="{{ url_for('BookVehicle') }}" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+
+            {{ form.fname.label }}<br>
+            {{ form.fname(size=32, required=true) }}<br>
+
+            {{ form.mname.label }}<br>
+            {{ form.mname(size=32, required=true) }}<br>
+
+            {{ form.lname.label }}<br>
+            {{ form.lname(size=32, required=true) }}<br>
+
+            {{ form.idpassport.label }}<br>
+            {{ form.idpassport }}<br>
+            {% for error in form.idpassport.errors %}
+                <span style="color: red;">[{{ error }}]</span><br>
+            {% endfor %}
+
+            {{ form.pickup.label }}
+            {{ form.pickup(size=20, id="pickup-date", required=true, pattern="\d{4}-\d{2}-\d{2}") }}<br>
+
+            {{ form.pickup_location.label }}
+            {{ form.pickup_location(id="pickup-location") }}
+
+            {{ form.dropoff.label }}
+            {{ form.dropoff(size=20, id="dropoff-date", required=true, pattern="\d{4}-\d{2}-\d{2}") }}<br>
+
+            {{ form.dropoff_location.label }}
+            {{ form.dropoff_location(id="dropoff-location") }}
+
+            {{ form.vehicle_type.label }}
+            {{ form.vehicle_type(id="vehicle") }}
+
+            {{ form.PaymentMethod.label }}<br>
+            {{ form.PaymentMethod(size=32, required=true) }}<br>
+
+
+            <button type="submit" class="btn btn-primary">Book Vehicle</button>
+        </form>
+    </section>
+{% endblock %}

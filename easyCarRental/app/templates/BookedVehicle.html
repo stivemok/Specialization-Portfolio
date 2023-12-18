@@ -1,0 +1,76 @@
+
+
+{% block content %}
+    <h1>{{ title }}</h1>
+    <form method="POST">
+        <style>
+            table {
+                border-collapse: collapse;
+            }
+            th, td {
+                border: 1px solid black;
+                padding: 5px;
+            }
+            .idpassport {
+                transition: transform 0.25s ease;
+                width: 50px;
+                height: 50px;
+            }
+            .idpassport:hover {
+                transform: scale(7);
+                cursor: pointer;
+            }
+        </style>
+        <table>
+            <thead>
+                <tr>
+                    <th>Select</th>
+                    <th>ID</th>
+                    <th>First Name</th>
+                    <th>Middle Name</th>
+                    <th>Last Name</th>
+                    <th>ID Passport</th>
+                    <th>Pickup Date</th>
+                    <th>Pickup Location</th>
+                    <th>Dropoff Date</th>
+                    <th>Dropoff Location</th>
+                    <th>Vehicle Type</th>
+                    <th>Payment Method</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for booking in bookings %}
+                    <tr>
+                        <td><input type="checkbox" name="booking_ids" value="{{ booking.id }}"></td>
+                        <td>{{ booking.id }}</td>
+                        <td>{{ booking.fname }}</td>
+                        <td>{{ booking.mname }}</td>
+                        <td>{{ booking.lname }}</td>
+                        <td>
+                            {% if booking.idpassport %}
+                                <img src="data:image/png;base64,{{ booking.idpassport }}" alt="ID Passport" class="idpassport" onclick="downloadImage(this)">
+                            {% else %}
+                                <p>No ID Passport provided</p>
+                            {% endif %}
+                        </td>
+                        <td>{{ booking.pickup_date }}</td>
+                        <td>{{ booking.pickup_location }}</td>
+                        <td>{{ booking.dropoff_date }}</td>
+                        <td>{{ booking.dropoff_location }}</td>
+                        <td>{{ booking.vehicle_type }}</td>
+                        <td>{{ booking.PaymentMethod }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <button type="submit">Delete Selected Bookings</button>
+    </form>
+    <script>
+        function downloadImage(img) {
+            var link = document.createElement('a');
+            link.href = img.src;
+            link.download = 'IDPassport.png';
+            link.click();
+        }
+    </script>
+{% endblock %}

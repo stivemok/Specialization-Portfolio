@@ -13,6 +13,7 @@ from flask import jsonify
 import base64
 import requests
 import logging
+from wtforms import BooleanField
 
 
 @app.route('/')
@@ -278,13 +279,12 @@ def SearchVehicle():
     form = VehicleSearchForm()
 
     if form.validate_on_submit():
-        # Get the vehicle type from the form
-        vehicle_type = form.vehicle_type.data
+        vehicle_types = [field.label.text.lower() for field in form if isinstance(field, BooleanField) and field.data]
 
         # Query the database for the vehicle
         page = request.args.get('page', 1, type=int)
         per_page = 10
-        vehicles = Car.query.filter(Car.vehicle.ilike(f"%{vehicle_type}%")).paginate(page=page, per_page=per_page)
+        vehicles = Car.query.filter(Car.vehicle.in_(vehicle_types)).paginate(page=page, per_page=per_page)
 
         if vehicles.items:
             vehicles_list = []
@@ -326,6 +326,7 @@ def SearchVehicle():
             return redirect(url_for('vehicles'))
 
     return render_template('VehicleSearch.html', title='Search Vehicle', form=form)
+
 
 
 @app.route('/BookVehicle', methods=['GET', 'POST'])
@@ -372,6 +373,7 @@ def BookVehicle():
 
     return render_template('BookVehicle.html', form=form)
 
+
 @app.route('/vehicle_count', methods=['GET'])
 @login_required
 def vehicle_count():
@@ -385,8 +387,17 @@ def BookedVehicle():
         # Get the list of booking IDs from the form submission
         booking_ids = request.form.getlist('booking_ids')
 
+        # Get the bookings to be deleted
+        bookings_to_delete = Booking.query.filter(Booking.id.in_(booking_ids))
+
+        # Update the vehicle count for each booking to be deleted
+        for booking in bookings_to_delete:
+            vehicle_count = VehicleCount.query.filter_by(vehicle_type=booking.vehicle_type).first()
+            if vehicle_count:
+                vehicle_count.count += 1
+
         # Delete the selected bookings from the database
-        Booking.query.filter(Booking.id.in_(booking_ids)).delete(synchronize_session=False)
+        bookings_to_delete.delete(synchronize_session=False)
         db.session.commit()
 
         # Redirect back to the BookedVehicle page

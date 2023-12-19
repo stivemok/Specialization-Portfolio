@@ -328,7 +328,6 @@ def SearchVehicle():
     return render_template('VehicleSearch.html', title='Search Vehicle', form=form)
 
 
-
 @app.route('/BookVehicle', methods=['GET', 'POST'])
 def BookVehicle():
     form = BookVehicleForm()
@@ -372,7 +371,6 @@ def BookVehicle():
             flash('Successfully booked')
 
     return render_template('BookVehicle.html', form=form)
-
 
 @app.route('/vehicle_count', methods=['GET'])
 @login_required

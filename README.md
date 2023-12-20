@@ -1,5 +1,5 @@
 
-# Specialization Portfolio Project-Webstack
+# ✨Specialization Portfolio Project-Webstack✨
 
 Welcome to the Easy Car Rental website! Our website offers a simple and convenient way to book rental cars, register your car for rental, and manage your account through our admin login. Here’s a brief overview of our main features:
 
@@ -9,12 +9,6 @@ Welcome to the Easy Car Rental website! Our website offers a simple and convenie
 
 [![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
 
-Dillinger is a cloud-enabled, mobile-ready, offline-storage compatible,
-AngularJS-powered HTML5 Markdown editor.
-
-- Type some Markdown on the left
-- See HTML in the right
-- ✨Magic ✨
 
 ## Features
 
@@ -24,12 +18,12 @@ AngularJS-powered HTML5 Markdown editor.
 
 ## Tech
 
-- [Python 3]() - 
-- [pip]() - 
-- [Flask]() - 
-- [Flask-SQLAlchemy]()-
-- [Jinja2]() - 
-- [Flask-Bootstraps]() - 
+- [Python 3](https://www.python.org/downloads/) - Python 3 has a large and active community that provides many libraries and tools that you can use with Flask, such as SQLAlchemy, WTForms, Jinja2, and Flask-RESTful.
+- [pip](https://pypi.org/project/pip/) - it allows you to easily install, uninstall, and manage additional libraries and packages that are not part of the standard Python library. 
+- [Flask](https://flask.palletsprojects.com/en/3.0.x/) - Flask is a micro web framework written in Python.
+- [Flask-SQLAlchemy](https://flask-sqlalchemy.palletsprojects.com/en/3.1.x/)-SQLAlchemy is an open-source SQL toolkit and object-relational mapper (ORM) for the Python programming language released under the MIT License.
+- [Jinja2](https://jinja.palletsprojects.com/en/2.10.x/) - Jinja is a web template engine for the Python programming language
+- [Flask-Bootstraps](https://pythonhosted.org/Flask-Bootstrap/) - Bootstrap is a free and open-source CSS framework directed at responsiv
 
 
 

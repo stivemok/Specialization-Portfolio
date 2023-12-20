@@ -1,5 +1,5 @@
 
-# Specialization Portfolio Project-Webstack
+# ✨Specialization Portfolio Project-Webstack✨
 
 Welcome to the Easy Car Rental website! Our website offers a simple and convenient way to book rental cars, register your car for rental, and manage your account through our admin login. Here’s a brief overview of our main features:
 
@@ -9,12 +9,6 @@ Welcome to the Easy Car Rental website! Our website offers a simple and convenie
 
 [![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
 
-Dillinger is a cloud-enabled, mobile-ready, offline-storage compatible,
-AngularJS-powered HTML5 Markdown editor.
-
-- Type some Markdown on the left
-- See HTML in the right
-- ✨Magic ✨
 
 ## Features
 

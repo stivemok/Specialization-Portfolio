@@ -24,7 +24,7 @@ AngularJS-powered HTML5 Markdown editor.
 
 ## Tech
 
-- [Python 3](https://www.python.org/downloads/){:target="_blank" rel="noopener"} - 
+- [Python 3]: https://www.python.org/downloads/
 - [pip]() - 
 - [Flask]() - 
 - [Flask-SQLAlchemy]()-

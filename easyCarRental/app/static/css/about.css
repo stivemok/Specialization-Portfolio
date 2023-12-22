@@ -1,7 +1,7 @@
 body {
     font-family: sans-serif;
-    margin: 0;
-    padding: 0;
+    margin: 20px;
+    padding: 10px;
     background-color: #f5f5f5; /* Light gray background */
   }
   
@@ -78,4 +78,3 @@ body {
     object-fit: cover; /* Ensure image fills the container */
     border-radius: 5px 5px 0 0;
   }
-  

@@ -26,7 +26,7 @@
         <form action="/SearchVehicle" method="POST">
             {{ form.hidden_tag() }}
             <label for="sedan">{{ form.sedan.label }}</label>
-            {{ form.sedan }}
+	    {{ form.sedan }}
             <img src="../static/css/cars/icons/sedan1.png" alt="sedan" style="width: 30%; height: 30%; display: flex; margin: auto; margin-top: -70px;"><br><br>
             <label for="compact">{{ form.compact.label }}</label>
             {{ form.compact }}
@@ -47,14 +47,7 @@
         </form>
       </section>
       
+
   </body>
-    
-  <footer>
-    <p>2023 Easy Car Rentals.</p><br>
-    <p>|Contact us: <br>
-      |Email: info@easycarrentals.com<br>
-      |Phone: +251 (555) 123-4567<br>
-      |Address: Addis Ababa, Ethiopia</p>
-  </footer>
     
 {% endblock %}

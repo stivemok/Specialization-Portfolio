@@ -10,12 +10,12 @@
         }
         header {
             background-color: rgb(0, 204, 255);
-            padding: 10px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             border-width: 20px;
             border-radius: 20px;
+            margin: 0px;
         }
         
         nav ul {
@@ -26,12 +26,10 @@
             list-style: none;
             display: flex;
         }
-
         nav li {
             /* list-style: none; */
             margin-right: 20px;
         }
-
         nav a {
             text-decoration: none;
             font-size: 22px;
@@ -96,6 +94,48 @@
             font-family: 'Exo', sans-serif;
             font-weight: 600;
         }
+        ul.topnav {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            /* background-color: #333; */
+            }
+        ul.topnav li {float: left;}
+        ul.topnav li a {
+            display: block;
+            color: black;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-family: 'Exo', sans-serif;
+            /* font-weight: 400; */
+            }
+        ul.topnav li a:hover:not(.active) {background-color: #2cacdf;transform: scale(1.3);border-radius: 20px;}
+
+        ul.topnav li a.active {
+            background-color: #04AA6D;
+        }
+        ul.topnav li.right {float: right;}
+
+        @media screen and (max-width: 600px) {
+            ul.topnav li.right, 
+            ul.topnav li {float: none;}
+        }
+        .logodiv{
+            display: flex;
+            align-items: center;
+        }
+        .logodiv a:hover{
+            background-color: transparent!important;
+        }
+        .logodiv h1{
+            margin: 0px;
+            padding: 0px;
+            font-size: 30px;
+            font-family: 'Exo', sans-serif;
+            font-weight: 600;
+        }
     </style>
     <head>
         {% if title %}
@@ -108,7 +148,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
         <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/about.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/index.css') }}">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Exo&display=swap" rel="stylesheet">
     </head>
     <body>
         <header>
@@ -118,7 +162,7 @@
                 <h1>Easy Car Rental</h1>
             </div>
             <nav>
-                <ul>
+                <ul class="topnav">
                     <li><a href="{{ url_for('index') }}">Home</a></li>
                     <li><a href="{{ url_for('vehicles') }}">Vehicles</a></li>
                     <li><a href="{{ url_for('VehicelRegistration') }}">Vehicel Registration</a></li>
@@ -143,7 +187,16 @@
         </ul>
         {% endif %}
         {% endwith %}
+        <main>
         {% block content %}{% endblock %}
+        </main>
+        <footer>
+            <p>2023 Easy Car Rentals.</p><br>
+            <p>|Contact us: <br>
+              |Email: info@easycarrentals.com<br>
+              |Phone: +251 (555) 123-4567<br>
+              |Address: Addis Ababa, Ethiopia</p>
+          </footer>
 
         <script src="{{ url_for('static', filename='js/index.js') }}"></script>
     </body>

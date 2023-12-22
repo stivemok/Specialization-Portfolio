@@ -6,6 +6,8 @@ from app import db
 from app.models import User
 from wtforms import DateField
 from wtforms import SelectMultipleField
+from wtforms import BooleanField
+from wtforms import BooleanField
 
 
 class LoginForm(FlaskForm):

@@ -385,8 +385,17 @@ def BookedVehicle():
         # Get the list of booking IDs from the form submission
         booking_ids = request.form.getlist('booking_ids')
 
+        # Get the bookings to be deleted
+        bookings_to_delete = Booking.query.filter(Booking.id.in_(booking_ids))
+
+        # Update the vehicle count for each booking to be deleted
+        for booking in bookings_to_delete:
+            vehicle_count = VehicleCount.query.filter_by(vehicle_type=booking.vehicle_type).first()
+            if vehicle_count:
+                vehicle_count.count += 1
+
         # Delete the selected bookings from the database
-        Booking.query.filter(Booking.id.in_(booking_ids)).delete(synchronize_session=False)
+        bookings_to_delete.delete(synchronize_session=False)
         db.session.commit()
 
         # Redirect back to the BookedVehicle page

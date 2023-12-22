@@ -1,70 +1,142 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+
 
 {% block content %}
-  <h2 style="margin-left: 40%;">Car Owner Info</h2>
+<section class="booking-form container" style="width: 80%; margin-left: 10%; padding: 20px;">
+<h1>Car Rental Registration Form</h1>
+    <form method="post" enctype="multipart/form-data" style="width: 70%; display: flex; flex-wrap: wrap;">
+        {{ form.hidden_tag() }}
+        <div class="form-group" style="padding: 10px; flex: 1;">
+            {{ form.fname.label }}
+            {{ form.fname(size=32) }}<br>
+            {% for error in form.fname.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div class="form-group" style="padding: 10px; flex: 1;">
+            {{ form.mname.label }}
+            {{ form.mname(size=32) }}<br>
+            {% for error in form.mname.errors %}
+                <span style="color: red;">[{{ error }}]</span><br>
+            {% endfor %}
+        </div>
+        <div class="form-group" style="flex: 1; padding: 10px;">
+            {{ form.lname.label }}
+            {{ form.lname(size=32) }}<br>
+            {% for error in form.lname.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div><br>
+        
+        <div class="form-group" style="flex: 1; padding: 10px;">
+            {{ form.phone.label }}
+            {{ form.phone(size=32) }}
+            {% for error in form.phone.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
 
-  {% if registrations %}
-    <ul style="list-style: none; padding: 0; display: flex;" class="registration-list">
-      {% for registration in registrations %}
-      <li style="margin-bottom: 20px; padding: 10px; border: 1px solid #ccc;  width: 30%;" class="registration-item">
-          <ul style="list-style: none; padding: 0;" class="registration-details">
-            <li style="margin-bottom: 5px;"><strong>First Name:</strong> {{ registration.fname }}</li>
-            <li style="margin-bottom: 5px;"><strong>Middle Name:</strong> {{ registration.mname }}</li>
-            <li style="margin-bottom: 5px;"><strong>Last Name:</strong> {{ registration.lname }}</li>
-            <li style="margin-bottom: 5px;"><strong>Phone:</strong> {{ registration.phone }}</li>
-            <li style="margin-bottom: 5px;"><strong>Email:</strong> {{ registration.email }}</li>
-            <li style="margin-bottom: 5px;"><strong>Make:</strong> {{ registration.make }}</li>
-            <li style="margin-bottom: 5px;"><strong>Model:</strong> {{ registration.model }}</li>
-            <li style="margin-bottom: 5px;"><strong>Vehicle:</strong> {{ registration.vehicle }}</li>
-            <li style="margin-bottom: 5px;"><strong>Year:</strong> {{ registration.year }}</li>
-            <li style="margin-bottom: 5px;"><strong>Color:</strong> {{ registration.color }}</li>
-            <li style="margin-bottom: 5px;"><strong>Price:</strong> {{ registration.price }}</li>
-            <li style="margin-bottom: 5px;"><strong>Condition:</strong> {{ registration.condition }}</li>
-            <li style="margin-bottom: 5px;"><strong>Plate No:</strong> {{ registration.PlateNo }}</li>
-            <li style="margin-bottom: 5px;"><strong>Submission Date:</strong> {{ registration.submissionDate }}</li>
-          </ul>
-          {% if registration.carreg %}
-            <p><strong>Car Registration:</strong></p>
-            <a href="data:image/jpeg;base64,{{ registration.carreg }}" download>
-              <img style="max-width: 100%; height: auto; margin-top: 10px; max-width: 100px;" class="registration-photo" src="data:image/jpeg;base64,{{ registration.carreg }}" alt="Car Registration">
-              <p>Click here to download</p>
-            </a>
-          {% endif %}
-          {% if registration.idpassport %}
-            <p><strong>ID/Passport:</strong></p>
-            <a href="data:image/jpeg;base64,{{ registration.idpassport }}" download>
-              <img style="max-width: 100%; height: auto; margin-top: 10px; max-width: 100px;" class="registration-photo" src="data:image/jpeg;base64,{{ registration.idpassport }}" alt="ID/Passport">
-              <p>Click here to download</p>
-            </a>
-          {% endif %}
-          {% if registration.photo1 %}
-            <p><strong>Photo 1:</strong></p>
-            <a href="data:image/jpeg;base64,{{ registration.photo1 }}" download>
-              <img style="max-width: 100%; height: auto; margin-top: 10px; max-width: 100px;" class="registration-photo" src="data:image/jpeg;base64,{{ registration.photo1 }}" alt="Photo 1">
-              <p>Click here to download</p>
-            </a>
-          {% endif %}
-          {% if registration.photo2 %}
-            <p><strong>Photo 2:</strong></p>
-            <a href="data:image/jpeg;base64,{{ registration.photo2 }}" download>
-              <img style="max-width: 100%; height: auto; margin-top: 10px; max-width: 100px;" class="registration-photo" src="data:image/jpeg;base64,{{ registration.photo2 }}" alt="Photo 2">
-              <p>Click here to download</p>
-            </a>
-          {% endif %}
-      </li>
-      {% endfor %}
-    </ul>
+        <div class="form-group" style="flex: 1; padding: 10px;">
+            {{ form.email.label }}
+            {{ form.email(size=32) }}
+            {% for error in form.email.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
 
-    <nav aria-label="Page navigation">
-      <ul style="list-style: none; padding: 0;" class="pagination">
-        {% for page_num in range(1, total_pages + 1) %}
-          <li style="display: inline-block; margin-right: 5px;" class="page-item {% if page_num == current_page %}active{% endif %}">
-            <a style="text-decoration: none; padding: 5px 10px; background-color: #f5f5f5; border: 1px solid #ddd; color: #333;" class="page-link" href="{{ url_for('vehicles', page=page_num) }}">{{ page_num }}</a>
-          </li>
-        {% endfor %}
-      </ul>
-    </nav>
-  {% else %}
-    <p>No registration data available.</p>
-  {% endif %}
+        <div class="form-group" style="flex: 1; padding: 10px;">
+            {{ form.make.label }}
+            {{ form.make(size=32) }}
+            {% for error in form.make.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div class="form-group" style="flex: 1; padding: 10px;">
+            {{ form.model.label }}
+            {{ form.model(size=32) }}
+            {% for error in form.model.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div class="form-group" style="flex: 1; padding: 10px;">
+            {{ form.color.label }}
+            {{ form.color(size=32) }}
+            {% for error in form.color.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div class="form-group" style="flex: 1; padding: 10px;">
+            {{ form.price.label }}
+            {{ form.price(size=32) }}
+            {% for error in form.price.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div class="form-group" style="flex: 1; padding: 10px;">
+            {{ form.condition.label }}
+            {{ form.condition(size=32) }}
+            {% for error in form.condition.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+
+        <div class="form-group" style="flex: 1; padding: 10px;">
+            {{ form.PlateNo.label }}
+            {{ form.PlateNo(size=32) }}
+            {% for error in form.PlateNo.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+
+        <div class="form-group" style="flex: 1; padding: 20px;">
+            {{ form.vehicle.label }}
+            {{ form.vehicle }}
+            {% for error in form.vehicle.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div class="form-group" style="flex: 1; padding: 10px;">
+            {{ form.year.label }}
+            {{ form.year }}
+            {% for error in form.year.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+
+        <div class="form-group" style="flex: 1; padding: 10px;">
+            {{ form.idpassport.label }}
+            {{ form.idpassport }}
+            {% for error in form.idpassport.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        
+        <div class="form-group" style="flex: 2; padding: 10px;">
+            {{ form.carreg.label }}
+            {{ form.carreg }}
+            {% for error in form.carreg.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+
+        <div class="form-group" style="flex: 1; padding: 10px;">
+            {{ form.photo1.label }}
+            {{ form.photo1 }}
+            {% for error in form.photo1.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div class="form-group" style="flex: 1; padding: 10px;">
+            {{ form.photo2.label }}
+            {{ form.photo2 }}
+            {% for error in form.photo2.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div class="form-group" style="flex: 2; padding: 10px;">
+            <button type="submit" class="btn btn-primary" style="width: 50%;">Register</button>
+            <!-- {{ form.submit }} -->
+        </div>
+    </form>
+</section>
 {% endblock %}

@@ -2,10 +2,14 @@
 
 <html>
     <style>
+        body{
+            justify-content: center;
+            align-items: center;
+            font-family: sans-serif;
+            /* background-color: #d0d018; */
+        }
         header {
             background-color: rgb(0, 204, 255);
-            color: darkblue;
-            padding: 5px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -15,18 +19,80 @@
         }
         
         nav ul {
+            /* padding: 0;
+            margin: 0;
+            display: flex;
+            flex-wrap: wrap; */
             list-style: none;
             display: flex;
         }
         nav li {
+            /* list-style: none; */
             margin-right: 20px;
         }
         nav a {
             text-decoration: none;
-            color: darkblue;
+            font-size: 22px;
+            display: block;
+            padding: 10px 15px;
+            position: relative;
+            /* text-decoration: none;
+            color: darkblue; */
         }
-        a:hover {
+        nav a:before{
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: blueviolet ;
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: all 0.5s;
+        }
+        nav a:after{
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
             background-color: blueviolet;
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: all 0.5s;
+        }
+        nav a:hover:not(:active){
+            background-color: #2cacdf;
+            transform: scale(1.3);
+            border-radius: 10px;
+        }
+
+        nav a:active {
+            background-color: #8e54b5;
+
+            /* color: blueviolet; 
+             background-color: blueviolet;  */
+        }
+        nav a:hover:before, ul li a:hover:after{
+            transform: scaleX(1);
+        }
+        .logodiv{
+            display: flex;
+            align-items: center;
+            padding: 5px;
+        }
+        .logodiv a:hover{
+            background-color: transparent!important;
+            transform: scale(1.3);
+        }
+        .logodiv h1{
+            margin: 0px;
+            padding: 10px;
+            font-size: 30px;
+            font-family: 'Exo', sans-serif;
+            font-weight: 600;
         }
         ul.topnav {
             list-style-type: none;
@@ -73,9 +139,9 @@
     </style>
     <head>
         {% if title %}
-        <title>{{ title }} - easy</title>
+        <title>{{ title }} - Easy Car Rental</title>
         {% else %}
-        <title>Welcome to Easy Car Rental</title>
+        <title>Easy Car Rental</title>
         {% endif %}
 
         <meta charset="UTF-8">
@@ -99,12 +165,12 @@
                 <ul class="topnav">
                     <li><a href="{{ url_for('index') }}">Home</a></li>
                     <li><a href="{{ url_for('vehicles') }}">Vehicles</a></li>
-                    <li><a href="{{ url_for('location') }}">Location</a></li>
                     <li><a href="{{ url_for('VehicelRegistration') }}">Vehicel Registration</a></li>
+                    <li><a href="{{ url_for('location') }}">Location</a></li>
                     <li><a href="{{ url_for('about') }}">About</a></li>
         
                     {% if current_user.is_anonymous %}
-                    <li><a href="{{ url_for('login') }}">Admin Login</a></li>
+                    <li><a href="{{ url_for('login') }}"></a></li>
                     {% else %}
                     <li><a href="{{ url_for('logout') }}">Log Out</a></li>
                     {% endif %}

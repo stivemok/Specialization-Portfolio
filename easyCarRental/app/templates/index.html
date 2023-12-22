@@ -26,23 +26,28 @@
         <form action="/SearchVehicle" method="POST">
             {{ form.hidden_tag() }}
             <label for="sedan">{{ form.sedan.label }}</label>
-            {{ form.sedan }}<br>
-            <img src="../static/css/cars/icons/sedan1.png" alt="sedan" style="width: 30%; height: 30%; display: flex; margin: auto; margin-top: -80px;"><br><br>
+	    {{ form.sedan }}
+            <img src="../static/css/cars/icons/sedan1.png" alt="sedan" style="width: 30%; height: 30%; display: flex; margin: auto; margin-top: -70px;"><br><br>
             <label for="compact">{{ form.compact.label }}</label>
-            {{ form.compact }}<br>
-            <img src="../static/css/cars/icons/compact.jpg" alt="compact" style="width: 30%; height: 30%; display: flex; margin: auto; margin-top: -75px;"><br>
+            {{ form.compact }}
+            <img src="../static/css/cars/icons/compact.jpg" alt="compact" style="width: 30%; height: 30%; display: flex; margin: auto; margin-top: -70px;"><br>
             <label for="suv">{{ form.suv.label }}</label>
-            {{ form.suv }}<br>
-            <img src="../static/css/cars/icons/suv3.png" alt="suv" style="width: 30%; height: 30%; display: flex; margin: auto; margin-top: -100px;"><br>
+            {{ form.suv }}
+            <img src="../static/css/cars/icons/suv3.png" alt="suv" style="width: 30%; height: 30%; display: flex; margin: auto; margin-top: -75px;"><br><br>
             <label for="van">{{ form.van.label }}</label>
-            {{ form.van }}<br>
-            <img src="../static/css/cars/icons/van1.png" alt="van" style="width: 45%; height: 45%; display: flex; margin: auto; margin-top: -80px;"><br>
+            {{ form.van }}
+            <img src="../static/css/cars/icons/van1.png" alt="van" style="width: 45%; height: 45%; display: flex; margin: auto; margin-top: -70px;"><br><br>
             <label for="truck">{{ form.truck.label }}</label>
-            {{ form.truck }}<br>
+            {{ form.truck }}
             <img src="../static/css/cars/icons/truck.jfif" alt="truck" style="width: 27%; height: 27%; display: flex; margin: auto; margin-top: -50px;"><br>
-            {{ form.submit() }}
+            <div class="submit">
+              <button type="submit" class="btn btn-primary" style="width: 50%;">Search Vehicle</button>
+              <!-- {{ form.submit() }} -->
+            </div>
         </form>
       </section>
+      
+
   </body>
     
 {% endblock %}

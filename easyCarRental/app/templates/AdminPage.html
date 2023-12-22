@@ -4,8 +4,8 @@
     
         
             <h1>Admin Dashboard</h1>
-            <h2>Welcome, Admin!</h2>
-            <p>From this dashboard, you can manage user accounts, inventory, orders, and website content for Easy Car Rental.</p>
+            <h2 style="margin-left: 20px ;">Welcome, Admin!</h2>
+            <p style="margin-left: 50px;">From this dashboard, you can manage user accounts, inventory, orders, website content and track vehicles for Easy Car Rental.</p>
        
 
         <div class="content">
@@ -49,6 +49,10 @@
     </div>
 
     <style>
+
+        .content {
+            margin-left: 10%;
+        }
         .container {
             display: flex;
         }
@@ -68,6 +72,13 @@
             cursor: pointer;
         }
 
+        .collapsible:hover{
+            background-color: blueviolet;
+            width: 25%;
+            padding: 10px;
+            border-radius: 10px;
+        }
+
         .content-list {
             list-style-type: none;
             padding: 0;
@@ -77,7 +88,7 @@
         }
 
         .active {
-            color: blue; /* You can customize the active state styling */
+            color: blue;
         }
     </style>
 

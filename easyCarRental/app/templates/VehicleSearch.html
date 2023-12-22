@@ -1,24 +1,31 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div class="container">
-        <h2>Vehicle Details</h2>
+    
+        <h2>Your Search</h2>
         {% if cars %}
-            <ul style="list-style: none; padding: 0;" class="car-list">
+            <ul style="list-style: none; padding: 20;" class="car-list">
                 {% for car in cars %}
-                    <li style="margin-bottom: 20px; padding: 10px; border: 1px solid #ccc;" class="car-item">
-                        <h3>{{ car.make }} {{ car.model }}</h3>
-                        <p>Year: {{ car.year }}</p>
-                        <p>Condition: {{ car.condition }}</p>
-                        <p>Price: {{ car.price }}</p>
-                        <p>Color: {{ car.color }}</p>
-                        <p>Vehicle Type: {{ car.vehicle }}</p>
+                    <li style="margin-bottom: 20px; padding: 20px; width: 80%; border: 1px solid #ccc;" class="car-item">
+                        <strong>{{ car.make }} {{ car.model }}</strong>
+                        <ul style="list-style: none; padding: 20px;" class="car-details">
+                            <li style="margin-bottom: 5px;"><strong>Vehicle:</strong> {{ car.vehicle }}</li>
+                            <li style="margin-bottom: 5px;"><strong>Year:</strong> {{ car.year }}</li>
+                            <li style="margin-bottom: 5px;"><strong>Color:</strong> {{ car.color }}</li>
+                            <li style="margin-bottom: 5px;"><strong>Price:</strong> {{ car.price }}</li>
+                            <li style="margin-bottom: 5px;"><strong>Condition:</strong> {{ car.condition }}</li>
+                            <form action="{{ url_for('BookVehicle') }}" method="post" style="margin-left: 0%; width: 10%;">
+                                <button style="background-color: rgb(0, 204, 255); padding: 10px; border-radius: 5px; cursor: pointer; font-weight: bold;" type="submit" class="btn">Book Vehicle</button>
+                              </form>
+                        <div style="display: flex; justify-content: right; margin-top: -220px;">
                         {% if car.photo1 %}
-                            <img style="max-width: 100%; height: auto; margin-top: 10px; max-width: 200px;" class="car-photo" src="data:image/jpeg;base64,{{ car.photo1 }}" alt="Photo 1">
+                            <img style="max-width: 100%; height: auto; max-width: 400px;" class="car-photo" src="data:image/jpeg;base64,{{ car.photo1 }}" alt="Photo 1">
                         {% endif %}
                         {% if car.photo2 %}
-                            <img style="max-width: 100%; height: auto; margin-top: 10px; max-width: 200px;" class="car-photo" src="data:image/jpeg;base64,{{ car.photo2 }}" alt="Photo 2">
+                            <img style="max-width: 100%; height: auto; max-width: 400px;" class="car-photo" src="data:image/jpeg;base64,{{ car.photo2 }}" alt="Photo 2">
                         {% endif %}
+                        </div>
+                        </ul>
                     </li>
                 {% endfor %}
             </ul>
@@ -40,5 +47,9 @@
         {% else %}
             <p>No vehicle found.</p>
         {% endif %}
-    </div>
+    <style>
+    button:hover{
+      color: blueviolet;
+    }
+  </style>
 {% endblock %}

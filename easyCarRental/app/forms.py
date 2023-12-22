@@ -58,7 +58,11 @@ class CarRentalForm(FlaskForm):
 
 
 class VehicleSearchForm(FlaskForm):
-    vehicle_type = SelectField('Vehicle Type', choices=[('sedan', 'Sedan'), ('compact', 'Compact'), ('suv', 'SUV'), ('truck', 'Truck'), ('van', 'Van')], validators=[DataRequired()])
+    sedan = BooleanField('Sedan')
+    compact = BooleanField('Compact')
+    suv = BooleanField('SUV')
+    truck = BooleanField('Truck')
+    van = BooleanField('Van')
     submit = SubmitField('Search Vehicle')
 
 class CarInformationForm(FlaskForm):

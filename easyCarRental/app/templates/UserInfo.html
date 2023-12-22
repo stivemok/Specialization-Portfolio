@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 
 {% block content %}
-  <h2>Car Owner Info</h2>
+  <h2 style="margin-left: 40%;">Car Owner Info</h2>
 
   {% if registrations %}
-    <ul style="list-style: none; padding: 0;" class="registration-list">
+    <ul style="list-style: none; padding: 0; display: flex;" class="registration-list">
       {% for registration in registrations %}
       <li style="margin-bottom: 20px; padding: 10px; border: 1px solid #ccc;  width: 30%;" class="registration-item">
           <ul style="list-style: none; padding: 0;" class="registration-details">

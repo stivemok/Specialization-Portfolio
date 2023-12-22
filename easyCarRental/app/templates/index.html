@@ -19,50 +19,34 @@
             </div>
         </div>
 
+
        <!-- Vehicle booking form -->
        <section class="booking-form container">
         <h2>Search a Vehicle</h2>
-        <form action="/search-vehicle" method="POST" id="bookingForm">
-        <!-- <label for="pickup">Pick-up Date:</label>
-        <input type="date" id="pickup-date" name="pickup" required pattern="\d{4}-\d{2}-\d{2}">
-        <label for="dropdown">Pickup Location</label>
-        <select id="pickup-location">
-            <option value="Easy Rentals Office">Easy Rentals Office</option>
-            <option value="ADD Airport">ADD Airport</option>
-        </select><br>
-        <label for="dropoff">Drop-off Date</label>
-        <input type="date" id="dropoff-date" name="dropoff" required pattern="\d{4}-\d{2}-\d{2}">
-        <label for="dropdown">Drop-off Location</label>
-        <select id="dropoff-location">
-            <option value="Easy Rentals Office">Easy Rentals Office</option>
-            <option value="ADD Airport">ADD Airport</option><br>
-        </select><br> -->
-        <!-- <label for="vehicle">Vehicle Type</label> -->
-        <input type="checkbox" id="sedan">
-        <label for="sedan">Sedan</label><br>
-        <img src="../static/css/cars/icons/sedan1.png" alt="sedan" style="width: 30%; height: 30%; display: flex; margin: auto; margin-top: -80px;"><br><br>
-        <input type="checkbox" id="compact">
-        <label for="compact">Compact</label>
-        <img src="../static/css/cars/icons/compact.jpg" alt="compact" style="width: 30%; height: 30%; display: flex; margin: auto; margin-top: -75px;"><br>
-        <input type="checkbox" id="suv">
-        <label for="suv">SUV</label><br>
-        <img src="../static/css/cars/icons/suv3.png" alt="suv" style="width: 30%; height: 30%; display: flex; margin: auto; margin-top: -100px;"><br>
-        <input type="checkbox" id="van">
-        <label for="van">VAN</label><br>
-        <img src="../static/css/cars/icons/van1.png" alt="van" style="width: 45%; height: 45%; display: flex; margin: auto; margin-top: -80px;"><br>
-        <input type="checkbox" id="truck">
-        <label for="truck">Truck</label><br>
-        <img src="../static/css/cars/icons/truck.jfif" alt="truck" style="width: 27%; height: 27%; display: flex; margin: auto; margin-top: -50px;"><br>
-        <!-- <select id="vehicle" name="vehicle">
-          <option value="sedan">Sedan</option>
-          <option value="compact">Compact</option>
-          <option value="suv">SUV</option>
-          <option value="truck">Truck</option>
-          <option value="van">Van</option>
-        </select> -->
-     <button type="submit" class="btn btn-primary">Search Vehicle</button>
+        <form action="/SearchVehicle" method="POST">
+            {{ form.hidden_tag() }}
+            <label for="sedan">{{ form.sedan.label }}</label>
+            {{ form.sedan }}
+            <img src="../static/css/cars/icons/sedan1.png" alt="sedan" style="width: 30%; height: 30%; display: flex; margin: auto; margin-top: -70px;"><br><br>
+            <label for="compact">{{ form.compact.label }}</label>
+            {{ form.compact }}
+            <img src="../static/css/cars/icons/compact.jpg" alt="compact" style="width: 30%; height: 30%; display: flex; margin: auto; margin-top: -70px;"><br>
+            <label for="suv">{{ form.suv.label }}</label>
+            {{ form.suv }}
+            <img src="../static/css/cars/icons/suv3.png" alt="suv" style="width: 30%; height: 30%; display: flex; margin: auto; margin-top: -75px;"><br><br>
+            <label for="van">{{ form.van.label }}</label>
+            {{ form.van }}
+            <img src="../static/css/cars/icons/van1.png" alt="van" style="width: 45%; height: 45%; display: flex; margin: auto; margin-top: -70px;"><br><br>
+            <label for="truck">{{ form.truck.label }}</label>
+            {{ form.truck }}
+            <img src="../static/css/cars/icons/truck.jfif" alt="truck" style="width: 27%; height: 27%; display: flex; margin: auto; margin-top: -50px;"><br>
+            <div class="submit">
+              <button type="submit" class="btn btn-primary" style="width: 50%;">Search Vehicle</button>
+              <!-- {{ form.submit() }} -->
+            </div>
+        </form>
       </section>
-
+      
   </body>
     
   <footer>

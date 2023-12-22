@@ -13,6 +13,7 @@ from flask import jsonify
 import base64
 import requests
 import logging
+from wtforms import BooleanField
 
 
 @app.route('/')
@@ -278,13 +279,12 @@ def SearchVehicle():
     form = VehicleSearchForm()
 
     if form.validate_on_submit():
-        # Get the vehicle type from the form
-        vehicle_type = form.vehicle_type.data
+        vehicle_types = [field.label.text.lower() for field in form if isinstance(field, BooleanField) and field.data]
 
         # Query the database for the vehicle
         page = request.args.get('page', 1, type=int)
         per_page = 10
-        vehicles = Car.query.filter(Car.vehicle.ilike(f"%{vehicle_type}%")).paginate(page=page, per_page=per_page)
+        vehicles = Car.query.filter(Car.vehicle.in_(vehicle_types)).paginate(page=page, per_page=per_page)
 
         if vehicles.items:
             vehicles_list = []

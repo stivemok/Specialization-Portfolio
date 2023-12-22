@@ -14,8 +14,9 @@
             <li style="margin-bottom: 5px;"><strong>Color:</strong> {{ car.color }}</li>
             <li style="margin-bottom: 5px;"><strong>Price:</strong> {{ car.price }}</li>
             <li style="margin-bottom: 5px;"><strong>Condition:</strong> {{ car.condition }}</li>
-          
-          <button style="background-color: rgb(0, 204, 255); margin-top: 2%; padding: 10px; border-radius: 5px; cursor: pointer; font-weight: bold;" type="book" class="btn">Book Vehicle</button>
+        <form action="{{ url_for('BookVehicle') }}" method="post" style="margin-left: 0%; width: 10%;">
+          <button style="background-color: rgb(0, 204, 255); padding: 10px; border-radius: 5px; cursor: pointer; font-weight: bold;" type="submit" class="btn">Book Vehicle</button>
+        </form>
           <div style="display: flex; justify-content: right; margin-top: -220px;">
           {% if car.photo1 %}
             <img style="max-width: 100%; height: auto; max-width: 400px;" class="car-photo" src="data:image/jpeg;base64,{{ car.photo1 }}" alt="Photo 1">
@@ -41,4 +42,9 @@
   {% else %}
     <p>No car data available.</p>
   {% endif %}
+  <style>
+    button:hover{
+      color: blueviolet;
+    }
+  </style>
 {% endblock %}

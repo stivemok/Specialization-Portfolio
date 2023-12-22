@@ -2,130 +2,141 @@
 
 
 {% block content %}
+<section class="booking-form container" style="width: 80%; margin-left: 10%; padding: 20px;">
 <h1>Car Rental Registration Form</h1>
-    <form method="post" enctype="multipart/form-data">
+    <form method="post" enctype="multipart/form-data" style="width: 70%; display: flex; flex-wrap: wrap;">
         {{ form.hidden_tag() }}
-        <div class="form-group">
-            {{ form.fname.label }}<br>
+        <div class="form-group" style="padding: 10px; flex: 1;">
+            {{ form.fname.label }}
             {{ form.fname(size=32) }}<br>
             {% for error in form.fname.errors %}
-                <span style="color: red;">[{{ error }}]</span><br>
+                <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </div>
-        <div class="form-group">
-            {{ form.mname.label }}<br>
+        <div class="form-group" style="padding: 10px; flex: 1;">
+            {{ form.mname.label }}
             {{ form.mname(size=32) }}<br>
             {% for error in form.mname.errors %}
                 <span style="color: red;">[{{ error }}]</span><br>
             {% endfor %}
         </div>
-        <div class="form-group">
-            {{ form.lname.label }}<br>
+        <div class="form-group" style="flex: 1; padding: 10px;">
+            {{ form.lname.label }}
             {{ form.lname(size=32) }}<br>
             {% for error in form.lname.errors %}
-                <span style="color: red;">[{{ error }}]</span><br>
+                <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
-        </div>
-        <div class="form-group">
-            {{ form.idpassport.label }}<br>
-            {{ form.idpassport }}<br>
-            {% for error in form.idpassport.errors %}
-                <span style="color: red;">[{{ error }}]</span><br>
-            {% endfor %}
-        </div>
-        <div class="form-group">
-            {{ form.phone.label }}<br>
-            {{ form.phone(size=32) }}<br>
+        </div><br>
+        
+        <div class="form-group" style="flex: 1; padding: 10px;">
+            {{ form.phone.label }}
+            {{ form.phone(size=32) }}
             {% for error in form.phone.errors %}
-                <span style="color: red;">[{{ error }}]</span><br>
+                <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </div>
-        <div class="form-group">
-            {{ form.carreg.label }}<br>
-            {{ form.carreg }}<br>
-            {% for error in form.carreg.errors %}
-                <span style="color: red;">[{{ error }}]</span><br>
-            {% endfor %}
-        </div>
-        <div class="form-group">
-            {{ form.photo1.label }}<br>
-            {{ form.photo1 }}<br>
-            {% for error in form.photo1.errors %}
-                <span style="color: red;">[{{ error }}]</span><br>
-            {% endfor %}
-        </div>
-        <div class="form-group">
-            {{ form.photo2.label }}<br>
-            {{ form.photo2 }}<br>
-            {% for error in form.photo2.errors %}
-                <span style="color: red;">[{{ error }}]</span><br>
-            {% endfor %}
-        </div>
-        <div class="form-group">
-            {{ form.email.label }}<br>
-            {{ form.email(size=32) }}<br>
+
+        <div class="form-group" style="flex: 1; padding: 10px;">
+            {{ form.email.label }}
+            {{ form.email(size=32) }}
             {% for error in form.email.errors %}
-                <span style="color: red;">[{{ error }}]</span><br>
+                <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </div>
-        <div class="form-group">
-            {{ form.PlateNo.label }}<br>
-            {{ form.PlateNo(size=32) }}<br>
-            {% for error in form.PlateNo.errors %}
-                <span style="color: red;">[{{ error }}]</span><br>
-            {% endfor %}
-        </div>
-        <div class="form-group">
-            {{ form.make.label }}<br>
-            {{ form.make(size=32) }}<br>
+
+        <div class="form-group" style="flex: 1; padding: 10px;">
+            {{ form.make.label }}
+            {{ form.make(size=32) }}
             {% for error in form.make.errors %}
-                <span style="color: red;">[{{ error }}]</span><br>
+                <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </div>
-        <div class="form-group">
-            {{ form.model.label }}<br>
-            {{ form.model(size=32) }}<br>
+        <div class="form-group" style="flex: 1; padding: 10px;">
+            {{ form.model.label }}
+            {{ form.model(size=32) }}
             {% for error in form.model.errors %}
-                <span style="color: red;">[{{ error }}]</span><br>
+                <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </div>
-        <div class="form-group">
-            {{ form.color.label }}<br>
-            {{ form.color(size=32) }}<br>
+        <div class="form-group" style="flex: 1; padding: 10px;">
+            {{ form.color.label }}
+            {{ form.color(size=32) }}
             {% for error in form.color.errors %}
-                <span style="color: red;">[{{ error }}]</span><br>
+                <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </div>
-        <div class="form-group">
-            {{ form.price.label }}<br>
-            {{ form.price(size=32) }}<br>
+        <div class="form-group" style="flex: 1; padding: 10px;">
+            {{ form.price.label }}
+            {{ form.price(size=32) }}
             {% for error in form.price.errors %}
-                <span style="color: red;">[{{ error }}]</span><br>
+                <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </div>
-        <div class="form-group">
-            {{ form.condition.label }}<br>
-            {{ form.condition(size=32) }}<br>
+        <div class="form-group" style="flex: 1; padding: 10px;">
+            {{ form.condition.label }}
+            {{ form.condition(size=32) }}
             {% for error in form.condition.errors %}
-                <span style="color: red;">[{{ error }}]</span><br>
+                <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </div>
-        <div class="form-group">
-            {{ form.vehicle.label }}<br>
-            {{ form.vehicle }}<br>
+
+        <div class="form-group" style="flex: 1; padding: 10px;">
+            {{ form.PlateNo.label }}
+            {{ form.PlateNo(size=32) }}
+            {% for error in form.PlateNo.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+
+        <div class="form-group" style="flex: 1; padding: 20px;">
+            {{ form.vehicle.label }}
+            {{ form.vehicle }}
             {% for error in form.vehicle.errors %}
-                <span style="color: red;">[{{ error }}]</span><br>
+                <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </div>
-        <div class="form-group">
-            {{ form.year.label }}<br>
-            {{ form.year }}<br>
+        <div class="form-group" style="flex: 1; padding: 10px;">
+            {{ form.year.label }}
+            {{ form.year }}
             {% for error in form.year.errors %}
-                <span style="color: red;">[{{ error }}]</span><br>
+                <span style="color: red;">[{{ error }}]</span>
             {% endfor %}
         </div>
-        <div class="form-group">
-            {{ form.submit }}
+
+        <div class="form-group" style="flex: 1; padding: 10px;">
+            {{ form.idpassport.label }}
+            {{ form.idpassport }}
+            {% for error in form.idpassport.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        
+        <div class="form-group" style="flex: 2; padding: 10px;">
+            {{ form.carreg.label }}
+            {{ form.carreg }}
+            {% for error in form.carreg.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+
+        <div class="form-group" style="flex: 1; padding: 10px;">
+            {{ form.photo1.label }}
+            {{ form.photo1 }}
+            {% for error in form.photo1.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div class="form-group" style="flex: 1; padding: 10px;">
+            {{ form.photo2.label }}
+            {{ form.photo2 }}
+            {% for error in form.photo2.errors %}
+                <span style="color: red;">[{{ error }}]</span>
+            {% endfor %}
+        </div>
+        <div class="form-group" style="flex: 2; padding: 10px;">
+            <button type="submit" class="btn btn-primary" style="width: 50%;">Register</button>
+            <!-- {{ form.submit }} -->
         </div>
     </form>
+</section>
 {% endblock %}

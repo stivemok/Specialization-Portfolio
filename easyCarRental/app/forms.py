@@ -1,13 +1,12 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, FileField, SelectField, IntegerField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, FileField, SelectField, IntegerField, HiddenField
 from wtforms.validators import ValidationError, DataRequired, Email, EqualTo, Length
 import sqlalchemy as sa
 from app import db
 from app.models import User
 from wtforms import DateField
 from wtforms import SelectMultipleField
-from wtforms import BooleanField
-from wtforms import BooleanField
+from wtforms import BooleanField, SubmitField
 
 
 class LoginForm(FlaskForm):
@@ -57,7 +56,6 @@ class CarRentalForm(FlaskForm):
     vehicle = SelectField('Vehicle Type', choices=[('sedan', 'Sedan'), ('suv', 'SUV'), ('truck', 'Truck'), ('van', 'Van')], validators=[DataRequired()])
     year = IntegerField('Release Year', validators=[DataRequired()], render_kw={"min": "1900", "max": "2023", "required": True})
     submit = SubmitField('Submit')
-
 
 class VehicleSearchForm(FlaskForm):
     sedan = BooleanField('Sedan')
@@ -109,5 +107,15 @@ class BookVehicleForm(FlaskForm):
     dropoff = DateField('Dropoff Date', format='%Y-%m-%d', validators=[DataRequired()])
     dropoff_location = SelectField('Drop-off Location', choices=[('Easy Rentals Office', 'Easy Rentals Office'), ('ADD Airport', 'ADD Airport')], validators=[DataRequired()])
     vehicle_type = SelectField('Vehicle Type', choices=[('sedan', 'Sedan'), ('compact', 'Compact'), ('suv', 'SUV'), ('truck', 'Truck'), ('van', 'Van')], validators=[DataRequired()])
-    PaymentMethod = StringField('Payment Method', validators=[DataRequired(), Length(max=32)])
+    PaymentMethod = SelectField('Payment Method', choices=[('CBE', 'CBE'), ('paypal', 'Paypal'), ('telebirr', 'Telebirr')])
+    VehicleId = IntegerField('VehicleId')
     submit = SubmitField('Book Vehicle')
+
+
+
+class UpdateUserForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired()])
+    email = StringField('Email', validators=[DataRequired(), Email()])
+    password = PasswordField('Password', validators=[DataRequired()])
+    confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Update')

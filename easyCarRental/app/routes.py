@@ -7,13 +7,15 @@ from app.forms import LoginForm, RegistrationForm, CarRentalForm
 from app.models import User, FormData, Car, Booking, VehicleCount
 from datetime import datetime # module to work with dates and times
 from app.forms import VehicleSearchForm, CarInformationForm, RemoveCarForm, CarUpdateForm 
-from app.forms import BookVehicleForm
-from app.api.api_routes import get_cars
-from flask import jsonify # Flask function that turns the JSON output into a flask response object
-import base64 # module for working with Base64 data
-import requests # library for making HTTP requests
-import logging # module for generating logging messages for the application
-from wtforms import BooleanField # field for handling Boolean data in WTForms
+from app.forms import BookVehicleForm, UpdateUserForm
+from flask import jsonify
+import base64
+import requests
+import logging
+from wtforms import BooleanField
+from app.api.api_routes import submit_payment,  get_cars, get_registrations
+from flask import current_app
+
 
 
 """ 
@@ -55,8 +57,7 @@ def logout():
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    if current_user.is_authenticated:
-        return redirect(url_for('admin'))
+    
     form = RegistrationForm()
     if form.validate_on_submit():
         user = User(username=form.username.data, email=form.email.data)
@@ -131,28 +132,20 @@ def location():
 
 @app.route('/vehicles', methods=['GET'])
 def vehicles():
-    # Make a request to the API endpoint (/api/cars)
-    api_url = 'http://localhost:3000/api/cars'
-
     page = request.args.get('page', default=1, type=int)
     per_page = request.args.get('per_page', default=10, type=int)
 
-    # Include any necessary query parameters in the API request
-    api_params = {'page': page, 'per_page': per_page}
-    response = requests.get(api_url, params=api_params)
+    # Call the function that handles the /api/cars endpoint
+    response = get_cars(page, per_page)
+    api_data = response.get_json()
 
-    if response.status_code == 200:
-        # If the API request is successful, extract data from the JSON response
-        api_data = response.json()
-        cars = api_data.get('cars', [])
-        total_pages = api_data.get('total_pages', 1)
-        current_page = api_data.get('current_page', 1)
-    else:
-        # If the API request fails, handle the error
-        return render_template('error.html', error_message='Failed to fetch data from the API')
+    cars = api_data.get('cars', [])
+    total_pages = api_data.get('total_pages', 1)
+    current_page = api_data.get('current_page', 1)
 
     # Render the template using data from the API
     return render_template('vehicles.html', cars=cars, total_pages=total_pages, current_page=current_page)
+
 
 @app.route('/AddCar', methods=['GET', 'POST'])
 @login_required
@@ -193,30 +186,22 @@ def AddCar():
 
     return render_template('AddCar.html', title='add car', form=form)
 
-@app.route('/UserInfo')
+
+@app.route('/UserInfo', methods=['GET'])
 def UserInfo():
-    # Make a request to the API endpoint (/api/registrations)
-    api_url = 'http://localhost:3000/api/registrations'  # Update the API endpoint
     page = request.args.get('page', default=1, type=int)
     per_page = request.args.get('per_page', default=10, type=int)
 
-    # Include any necessary query parameters in the API request
-    api_params = {'page': page, 'per_page': per_page}
-    response = requests.get(api_url, params=api_params)
+    # Call the function that handles the /api/registrations endpoint
+    response = get_registrations()
+    api_data = response.get_json()
 
-    if response.status_code == 200:
-        # If the API request is successful, extract data from the JSON response
-        api_data = response.json()
-        registrations = api_data.get('registrations', [])
-        total_pages = api_data.get('pagination', {}).get('total_pages', 1)
-        current_page = api_data.get('pagination', {}).get('current_page', 1)
-    else:
-        # If the API request fails, handle the error (e.g., show an error page)
-        return render_template('error.html', error_message='Failed to fetch data from the API')
+    registrations = api_data.get('registrations', [])
+    total_pages = api_data.get('pagination', {}).get('total_pages', 1)
+    current_page = api_data.get('pagination', {}).get('current_page', 1)
 
     # Render the template using data from the API
     return render_template('UserInfo.html', registrations=registrations, total_pages=total_pages, current_page=current_page)
-
 
 @app.route('/remove_car', methods=['GET', 'POST'])
 @login_required
@@ -225,23 +210,31 @@ def remove_car():
     page = request.args.get('page', 1, type=int)
     cars = Car.query.paginate(page=page, per_page=5)
     form.selected_cars.choices = [(car.PlateNo, car.PlateNo + ' ' + car.model) for car in cars.items]
+
     if form.validate_on_submit():
         selected_cars = form.selected_cars.data
         for plateNo in selected_cars:
             car = Car.query.filter_by(PlateNo=plateNo).first()
             if car:
+                # Check if the car is already booked
+                if Booking.query.filter_by(VehicleId=car.VehicleId).first():
+                    flash(f'The car {car.PlateNo} is already booked and cannot be removed.', 'danger')
+                    continue  # Skip to the next iteration
+
+                # If the car is not booked, proceed with removal
                 vehicle_count = VehicleCount.query.filter_by(vehicle_type=car.vehicle).first()
                 if vehicle_count and vehicle_count.count > 0:
                     vehicle_count.count -= 1
 
                 db.session.delete(car)
+                flash('Successfully removed selected cars!', 'success')
 
         db.session.commit()
 
         flash(' * Successfully removed selected vehicle(s)!', 'success')
         return redirect(url_for('remove_car'))
-    return render_template('remove_car.html', title='remove car', form=form, cars=cars)
 
+    return render_template('remove_car.html', title='Remove Car', form=form, cars=cars)
 
 
 @app.route('/UpdateCar', methods=['GET', 'POST'])
@@ -305,6 +298,8 @@ def SearchVehicle():
                         'condition': vehicle.condition,
                         'photo1': photo1_base64,
                         'photo2': photo2_base64,
+                        'VehicleId': vehicle.VehicleId,
+                        'available': vehicle.available,
                     }
                     vehicles_list.append(vehicle_details)
                 except Exception as e:
@@ -328,22 +323,33 @@ def SearchVehicle():
     return render_template('VehicleSearch.html', title='Search Vehicle', form=form)
 
 
-@app.route('/BookVehicle', methods=['GET', 'POST'])
-def BookVehicle():
+@app.route('/BookVehicle/<int:vehicle_id>/<vehicle_type>', methods=['GET', 'POST'])
+def BookVehicle(vehicle_id, vehicle_type):
     form = BookVehicleForm()
+    car = Car.query.get(vehicle_id)
+
+    if not car:
+        flash('Vehicle not found.')
+        return redirect(url_for('BookVehicle'))
+
     if form.validate_on_submit():
+        
+        try:
+            vehicle_type = form.vehicle_type.data
+            idpassport_data = form.idpassport.data.read()
 
-        idpassport_data = form.idpassport.data.read()
+            existing_booking = Booking.query.filter(
+                Booking.VehicleId == vehicle_id,
+                Booking.pickup_date <= form.dropoff.data,
+                Booking.dropoff_date >= form.pickup.data,
+            ).first()
 
-        # Check if the vehicle is already booked
-        existing_booking = Booking.query.filter(
-            Booking.vehicle_type == form.vehicle_type.data,
-            Booking.pickup_date <= form.dropoff.data,
-            Booking.dropoff_date >= form.pickup.data
-        ).first()
+            if not car.available or existing_booking:
+                flash('The car is not available. Please check another vehicle or date.')
+                
 
-        # Check if the vehicle count is not zero
-        vehicle_count = VehicleCount.query.filter_by(vehicle_type=form.vehicle_type.data).first()
+            payment_method_result = submit_payment(form.PaymentMethod.data)
+            flash(f'Payment Result: {payment_method_result}')
 
         if existing_booking or (vehicle_count and vehicle_count.count == 0):
             flash(' * The vehicle is booked. Please check another vehicle or date.')
@@ -360,17 +366,31 @@ def BookVehicle():
                 mname=form.mname.data,
                 lname=form.lname.data,
                 idpassport=idpassport_data,
-                PaymentMethod=form.PaymentMethod.data
+                PaymentMethod=form.PaymentMethod.data,
+                VehicleId=vehicle_id
             )
             db.session.add(booking)
 
-            # Decrease the vehicle count
-            vehicle_count.count -= 1
+            car.available = False
+            vehicle_count = VehicleCount.query.filter_by(vehicle_type=form.vehicle_type.data).first()
+             
+
+            if vehicle_count:
+                vehicle_count.count -= 1
 
             db.session.commit()
-            flash(' * Successfully booked')
 
-    return render_template('BookVehicle.html', form=form)
+            flash(' * Successfully booked')
+            return redirect(url_for('BookVehicle', vehicle_id=vehicle_id, vehicle_type=vehicle_type))
+
+        except Exception as e:
+            current_app.logger.error(f'Error occurred: {e}')
+            print(f'Error occurred: {e}')  # Add this line for debugging
+            db.session.rollback()
+            flash('An error occurred. Database session rolled back.')
+
+    return render_template('BookVehicle.html', form=form, car=car)
+
 
 @app.route('/vehicle_count', methods=['GET'])
 @login_required
@@ -380,6 +400,7 @@ def vehicle_count():
 
 
 @app.route('/BookedVehicle', methods=['GET', 'POST'])
+@login_required
 def BookedVehicle():
     if request.method == 'POST':
         # Get the list of booking IDs from the form submission
@@ -388,11 +409,17 @@ def BookedVehicle():
         # Get the bookings to be deleted
         bookings_to_delete = Booking.query.filter(Booking.id.in_(booking_ids))
 
-        # Update the vehicle count for each booking to be deleted
+        # Update the vehicle count and availability for each booking to be deleted
         for booking in bookings_to_delete:
             vehicle_count = VehicleCount.query.filter_by(vehicle_type=booking.vehicle_type).first()
             if vehicle_count:
                 vehicle_count.count += 1
+
+            # Fetch the car from the Car table and update its availability
+            car = Car.query.get(booking.VehicleId)
+            if car:
+                car.available = True 
+                db.session.add(car)  # Add the car to the session to track changes
 
         # Delete the selected bookings from the database
         bookings_to_delete.delete(synchronize_session=False)
@@ -405,14 +432,16 @@ def BookedVehicle():
     page = request.args.get('page', 1, type=int)
     per_page = 10
 
-    # Query the database for all bookings
-    bookings = Booking.query.paginate(page=page, per_page=per_page)
+    # Query the database for all bookings and related Car information
+    bookings = Booking.query.options(db.joinedload(Booking.car)).paginate(page=page, per_page=per_page)
+
 
     bookings_list = []
     for booking in bookings.items:
         try:
             # Convert the binary data to an image file
             idpassport_base64 = base64.b64encode(booking.idpassport).decode('utf-8') if booking.idpassport else None
+            plate_no = booking.car.PlateNo if booking.car else None
 
             # Create a dictionary with booking details
             booking_details = {
@@ -427,6 +456,8 @@ def BookedVehicle():
                 'lname': booking.lname,
                 'idpassport': idpassport_base64,
                 'PaymentMethod': booking.PaymentMethod,
+                'vehicle_id': booking.VehicleId,
+                'plate_no': plate_no,  # Include PlateNo in the result
             }
             bookings_list.append(booking_details)
         except Exception as e:
@@ -442,3 +473,52 @@ def BookedVehicle():
 
     return render_template('BookedVehicle.html', title='Booked Vehicle', bookings=result['bookings'], total_pages=result['total_pages'], current_page=result['current_page'])
 
+
+@app.route('/delete_registrations', methods=['POST'])
+@login_required
+def delete_registrations():
+    # Get the list of registration IDs to delete from the form data
+    registration_ids = request.form.getlist('registration_ids')
+
+    # Query the database for the registrations and delete them
+    for registration_id in registration_ids:
+        registration = FormData.query.get(registration_id)
+        if registration:
+            db.session.delete(registration)
+
+    # Commit the changes to the database
+    db.session.commit()
+
+    # Redirect the user back to the UserInfo page
+    return redirect(url_for('UserInfo'))
+
+
+
+@app.route('/users', methods=['GET', 'POST'])
+@login_required
+def users():
+    if request.method == 'POST':
+        user_id = request.form.get('user_id')
+        if user_id:
+            user = User.query.get(user_id)
+            if user:
+                db.session.delete(user)
+                db.session.commit()
+        return redirect(url_for('users'))
+    else:
+        users = User.query.all()
+        return render_template('users.html', title='Users', users=users)
+
+
+@app.route('/update_user', methods=['GET', 'POST'])
+def update_user():
+    form = UpdateUserForm()
+    if form.validate_on_submit():
+        user = User.query.get(form.user_id.data)
+        if user:
+            user.username = form.username.data
+            user.email = form.email.data
+            user.password = form.password.data  # Consider using a hashed password
+            db.session.commit()
+        return redirect(url_for('users'))
+    return render_template('update_user.html', form=form)

@@ -4,9 +4,14 @@
     <section class="booking-form container" style="width: 80%; margin-left: 10%; padding: 20px;">
         <h2>Book Vehicle</h2>
 
-        <form method="post" action="{{ url_for('BookVehicle') }}" enctype="multipart/form-data" style="width: 90%;">
+        <form method="post" action="{{ url_for('BookVehicle', vehicle_id=car.VehicleId, vehicle_type=car.vehicle) }}" enctype="multipart/form-data" style="width: 90%;">
+
             
             {{ form.hidden_tag() }}
+
+            <input type="hidden" name="VehicleId" value="{{ car.VehicleId }}">
+            <input type="hidden" name="vehicle_type" value="{{ car.vehicle }}">
+
           <div style="display: flex; flex-wrap: wrap;">
             <div class="name" style="padding: 25px; flex: 1;">
               {{ form.fname.label }}
@@ -45,10 +50,10 @@
               {{ form.dropoff_location.label }}
               {{ form.dropoff_location(id="dropoff-location") }}
             </div>
-            <!-- <div class="name" style="padding: 10px; flex: 3;">
-              {{ form.vehicle_type.label }}
-              {{ form.vehicle_type(id="vehicle") }}
-            </div> -->
+            <div class="name" style="padding: 25px; flex: 1;">
+              <label>Selected Vehicle Type</label>
+              <p>{{ car.vehicle }}</p>
+            </div>
             <div class="name" style="padding: 10px; flex: 3;">
               {{ form.PaymentMethod.label }}
               {{ form.PaymentMethod(size=32, required=true) }}

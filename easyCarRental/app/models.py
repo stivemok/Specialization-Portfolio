@@ -82,6 +82,10 @@ class Booking(db.Model):
     lname = db.Column(db.String(255), nullable=False)
     idpassport = db.Column(db.LargeBinary((2**32)-1))
     PaymentMethod = db.Column(db.String(255), nullable=False)
+    # Add a VehicleId field
+    VehicleId = db.Column(db.Integer, db.ForeignKey('vehicle.VehicleId'))
+    # Add a relationship field for the Car model
+    car = db.relationship('Car', backref='bookings')
     
 
 class VehicleCount(db.Model):

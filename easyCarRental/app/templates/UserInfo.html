@@ -1,142 +1,99 @@
-{% extends "base.html" %}
 
 
 {% block content %}
-<section class="booking-form container" style="width: 80%; margin-left: 10%; padding: 20px;">
-<h1>Car Rental Registration Form</h1>
-    <form method="post" enctype="multipart/form-data" style="width: 70%; display: flex; flex-wrap: wrap;">
-        {{ form.hidden_tag() }}
-        <div class="form-group" style="padding: 10px; flex: 1;">
-            {{ form.fname.label }}
-            {{ form.fname(size=32) }}<br>
-            {% for error in form.fname.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </div>
-        <div class="form-group" style="padding: 10px; flex: 1;">
-            {{ form.mname.label }}
-            {{ form.mname(size=32) }}<br>
-            {% for error in form.mname.errors %}
-                <span style="color: red;">[{{ error }}]</span><br>
-            {% endfor %}
-        </div>
-        <div class="form-group" style="flex: 1; padding: 10px;">
-            {{ form.lname.label }}
-            {{ form.lname(size=32) }}<br>
-            {% for error in form.lname.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </div><br>
-        
-        <div class="form-group" style="flex: 1; padding: 10px;">
-            {{ form.phone.label }}
-            {{ form.phone(size=32) }}
-            {% for error in form.phone.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </div>
+  <h2>Car Owner Info</h2>
 
-        <div class="form-group" style="flex: 1; padding: 10px;">
-            {{ form.email.label }}
-            {{ form.email(size=32) }}
-            {% for error in form.email.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </div>
+  <style>
+    table {
+      border-collapse: collapse;
+    }
+    th, td {
+      border: 1px solid black;
+      padding: 5px;
+    }
+    .registration-photo:hover {
+      transform: scale(1.5);
+    }
+  </style>
 
-        <div class="form-group" style="flex: 1; padding: 10px;">
-            {{ form.make.label }}
-            {{ form.make(size=32) }}
-            {% for error in form.make.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </div>
-        <div class="form-group" style="flex: 1; padding: 10px;">
-            {{ form.model.label }}
-            {{ form.model(size=32) }}
-            {% for error in form.model.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </div>
-        <div class="form-group" style="flex: 1; padding: 10px;">
-            {{ form.color.label }}
-            {{ form.color(size=32) }}
-            {% for error in form.color.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </div>
-        <div class="form-group" style="flex: 1; padding: 10px;">
-            {{ form.price.label }}
-            {{ form.price(size=32) }}
-            {% for error in form.price.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </div>
-        <div class="form-group" style="flex: 1; padding: 10px;">
-            {{ form.condition.label }}
-            {{ form.condition(size=32) }}
-            {% for error in form.condition.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </div>
-
-        <div class="form-group" style="flex: 1; padding: 10px;">
-            {{ form.PlateNo.label }}
-            {{ form.PlateNo(size=32) }}
-            {% for error in form.PlateNo.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </div>
-
-        <div class="form-group" style="flex: 1; padding: 20px;">
-            {{ form.vehicle.label }}
-            {{ form.vehicle }}
-            {% for error in form.vehicle.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </div>
-        <div class="form-group" style="flex: 1; padding: 10px;">
-            {{ form.year.label }}
-            {{ form.year }}
-            {% for error in form.year.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </div>
-
-        <div class="form-group" style="flex: 1; padding: 10px;">
-            {{ form.idpassport.label }}
-            {{ form.idpassport }}
-            {% for error in form.idpassport.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </div>
-        
-        <div class="form-group" style="flex: 2; padding: 10px;">
-            {{ form.carreg.label }}
-            {{ form.carreg }}
-            {% for error in form.carreg.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </div>
-
-        <div class="form-group" style="flex: 1; padding: 10px;">
-            {{ form.photo1.label }}
-            {{ form.photo1 }}
-            {% for error in form.photo1.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </div>
-        <div class="form-group" style="flex: 1; padding: 10px;">
-            {{ form.photo2.label }}
-            {{ form.photo2 }}
-            {% for error in form.photo2.errors %}
-                <span style="color: red;">[{{ error }}]</span>
-            {% endfor %}
-        </div>
-        <div class="form-group" style="flex: 2; padding: 10px;">
-            <button type="submit" class="btn btn-primary" style="width: 50%;">Register</button>
-            <!-- {{ form.submit }} -->
-        </div>
-    </form>
-</section>
+  {% if registrations %}
+  <form method="POST" action="{{ url_for('delete_registrations') }}">
+    <table>
+      <thead>
+        <tr>
+          <th>Delete</th>
+          <th>ID</th>
+          <th>First Name</th>
+          <th>Middle Name</th>
+          <th>Last Name</th>
+          <th>Phone</th>
+          <th>Email</th>
+          <th>Make</th>
+          <th>Model</th>
+          <th>Vehicle</th>
+          <th>Year</th>
+          <th>Color</th>
+          <th>Price</th>
+          <th>Condition</th>
+          <th>Plate No</th>
+          <th>Submission Date</th>
+          <th>Car Registration</th>
+          <th>ID/Passport</th>
+          <th>Photo 1</th>
+          <th>Photo 2</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for registration in registrations %}
+        <tr>
+          <td><input type="checkbox" name="registration_ids" value="{{ registration.CustomerId }}"></td>
+          <td>{{ registration.CustomerId }}</td>
+          <td>{{ registration.fname }}</td>
+          <td>{{ registration.mname }}</td>
+          <td>{{ registration.lname }}</td>
+          <td>{{ registration.phone }}</td>
+          <td>{{ registration.email }}</td>
+          <td>{{ registration.make }}</td>
+          <td>{{ registration.model }}</td>
+          <td>{{ registration.vehicle }}</td>
+          <td>{{ registration.year }}</td>
+          <td>{{ registration.color }}</td>
+          <td>{{ registration.price }}</td>
+          <td>{{ registration.condition }}</td>
+          <td>{{ registration.PlateNo }}</td>
+          <td>{{ registration.submissionDate }}</td>
+          <td>
+            <a href="data:image/jpeg;base64,{{ registration.carreg }}" download>
+              <img style="max-width: 100px;" class="registration-photo" src="data:image/jpeg;base64,{{ registration.carreg }}" alt="Car Registration">
+            </a>
+          </td>
+          <td>
+            <a href="data:image/jpeg;base64,{{ registration.idpassport }}" download>
+              <img style="max-width: 100px;" class="registration-photo" src="data:image/jpeg;base64,{{ registration.idpassport }}" alt="ID/Passport">
+            </a>
+          </td>
+          <td>
+            <a href="data:image/jpeg;base64,{{ registration.photo1 }}" download>
+              <img style="max-width: 100px;" class="registration-photo" src="data:image/jpeg;base64,{{ registration.photo1 }}" alt="Photo 1">
+            </a>
+          </td>
+          <td>
+            <a href="data:image/jpeg;base64,{{ registration.photo2 }}" download>
+              <img style="max-width: 100px;" class="registration-photo" src="data:image/jpeg;base64,{{ registration.photo2 }}" alt="Photo 2">
+            </a>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <button type="submit">Delete Selected Registrations</button>
+  </form>
+  <div>
+    {% for page_num in range(1, total_pages + 1) %}
+      <a href="{{ url_for('UserInfo', page=page_num) }}">Page {{ page_num }}</a>
+    {% endfor %}
+  </div>
+  {% else %}
+    <p>No registration data available.</p>
+  {% endif %}
 {% endblock %}

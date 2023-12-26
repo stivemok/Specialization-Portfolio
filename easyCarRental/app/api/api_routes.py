@@ -6,7 +6,7 @@ import logging
 
 
 @app.route('/api/cars', methods=['GET'])
-def get_cars():
+def get_cars(page=1, per_page=10):
     try:
         page = request.args.get('page', default=1, type=int)
         per_page = request.args.get('per_page', default=10, type=int)
@@ -112,3 +112,16 @@ def get_registrations():
     except Exception as e:
         return jsonify({'error': 'Internal Server Error'}), 500
     
+
+@app.route('/api/submit_payment', methods=['POST'])
+def submit_payment(payment_method):
+    # Simulate payment logic based on the selected payment method
+    # Replace this with your actual payment logic
+    if payment_method == 'CBE':
+        return 'Payment successful via CBE.'
+    elif payment_method == 'paypal':
+        return 'Payment successful via Paypal.'
+    elif payment_method == 'telebirr':
+        return 'Payment successful via Telebirr.'
+    else:
+        return 'Invalid payment method.'

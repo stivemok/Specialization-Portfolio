@@ -103,7 +103,7 @@ class BookVehicleForm(FlaskForm):
     fname = StringField('First Name', validators=[DataRequired(), Length(max=32)])
     mname = StringField('Middle Name', validators=[DataRequired(), Length(max=32)])
     lname = StringField('Last Name', validators=[DataRequired(), Length(max=32)])
-    idpassport = FileField('ID/Passport', validators=[DataRequired()], render_kw={"accept": "image/*", "required": True})
+    idpassport = FileField('ID/Passport/Driving licence', validators=[DataRequired()], render_kw={"accept": "image/*", "required": True})
     pickup = DateField('Pickup Date', format='%Y-%m-%d', validators=[DataRequired()])
     pickup_location = SelectField('Pickup Location', choices=[('Easy Rentals Office', 'Easy Rentals Office'), ('ADD Airport', 'ADD Airport')], validators=[DataRequired()])
     dropoff = DateField('Dropoff Date', format='%Y-%m-%d', validators=[DataRequired()])

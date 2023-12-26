@@ -1,26 +1,32 @@
-from urllib.parse import urlsplit
-from flask import render_template, flash, redirect, url_for, request
-from flask_login import login_user, logout_user, current_user, login_required
-import sqlalchemy as sa
+from urllib.parse import urlsplit # split URL into its components
+from flask import render_template, flash, redirect, url_for, request # Flask’s web development functionalities
+from flask_login import login_user, logout_user, current_user, login_required # Flask-Login, a library for managing user sessions
+import sqlalchemy as sa # SQL toolkit and Object-Relational Mapping (ORM) system
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, CarRentalForm
 from app.models import User, FormData, Car, Booking, VehicleCount
-from datetime import datetime
+from datetime import datetime # module to work with dates and times
 from app.forms import VehicleSearchForm, CarInformationForm, RemoveCarForm, CarUpdateForm 
 from app.forms import BookVehicleForm
 from app.api.api_routes import get_cars
-from flask import jsonify
-import base64
-import requests
-import logging
-from wtforms import BooleanField
+from flask import jsonify # Flask function that turns the JSON output into a flask response object
+import base64 # module for working with Base64 data
+import requests # library for making HTTP requests
+import logging # module for generating logging messages for the application
+from wtforms import BooleanField # field for handling Boolean data in WTForms
 
+
+""" 
+    Defining a route for Flask application.
+    Decorators tell Flask what URL should trigger the function that follows
+"""
 
 @app.route('/')
 @app.route('/index')
-def index():
-    form = VehicleSearchForm()
-    return render_template("index.html", title='Home Page', form=form)
+def index(): # Function triggered when a user accesses the / or /index URL 
+    form = VehicleSearchForm() # Creates an instance of the VehicleSearchForm class
+    favicon_url = url_for('static', filename='css/login.css')
+    return render_template("index.html", title='Welcome to', form=form, favicon_url=favicon_url) # Renders the index.html template
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -32,13 +38,13 @@ def login():
         user = db.session.scalar(
             sa.select(User).where(User.username == form.username.data))
         if user is None or not user.check_password(form.password.data):
-            flash('Invalid username or password')
+            flash(' * Invalid username or password')
             return redirect(url_for('login'))
         login_user(user, remember=form.remember_me.data)
         next_page = request.args.get('next')
         if not next_page or urlsplit(next_page).netloc != '':
             next_page = url_for('admin')
-            flash(f'Successfully logged in as {user.username}', 'success')
+            flash(f' * Successfully logged in as {user.username}', 'success')
         return redirect(next_page)
     return render_template('login.html', title='Sign In', form=form)
 
@@ -57,7 +63,7 @@ def register():
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
-        flash('Congratulations, you are now a registered user!')
+        flash(' * Congratulations, you are now a registered user!')
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
@@ -75,7 +81,7 @@ def VehicelRegistration():
         existing_entry = FormData.query.filter_by(PlateNo=form.PlateNo.data).first()
 
         if existing_entry:
-            flash('the car is already registered. Please register another', 'error')
+            flash(' * The vehicle is already registered. Please register another', 'error')
         else:
             # Read the photo data once
             photo1_data = form.photo1.data.read()
@@ -108,16 +114,10 @@ def VehicelRegistration():
 
             
 
-            flash('Successfully registered your car!', 'success')
+            flash(' * Successfully registered your vehicle!', 'success')
             return redirect(url_for('VehicelRegistration'))
 
     return render_template("VehicelRegistration.html", title='VehicelRegistration', form=form)
-
-
-
-
-
-
 
 
 @app.route('/about')
@@ -161,7 +161,7 @@ def AddCar():
     if form.validate_on_submit():
         existing_car = Car.query.filter_by(PlateNo=form.PlateNo.data).first()
         if existing_car:
-            flash('This car is already registered!', 'error')
+            flash(' * This vehicle is already registered!', 'error')
             return render_template('AddCar.html', title='add car', form=form)
 
         new_car = Car(
@@ -188,7 +188,7 @@ def AddCar():
 
         db.session.commit()
 
-        flash('Successfully added a car!', 'success')
+        flash(' * Successfully added a vehicle!', 'success')
         return redirect(url_for('AddCar'))
 
     return render_template('AddCar.html', title='add car', form=form)
@@ -238,7 +238,7 @@ def remove_car():
 
         db.session.commit()
 
-        flash('Successfully removed selected cars!', 'success')
+        flash(' * Successfully removed selected vehicle(s)!', 'success')
         return redirect(url_for('remove_car'))
     return render_template('remove_car.html', title='remove car', form=form, cars=cars)
 
@@ -268,7 +268,7 @@ def UpdateCar():
 
         db.session.commit()
 
-        flash('Car updated successfully!', 'success')
+        flash(' * Vehicle updated successfully!', 'success')
         return redirect(url_for('UpdateCar'))
 
     return render_template('UpdateCar.html', title='Update Car', form=form, cars=cars)
@@ -322,7 +322,7 @@ def SearchVehicle():
 
         else:
             # Vehicle not found
-            flash('No vehicle found! Please check these cars.', 'info')
+            flash('* No Vehicle(s) Found! Please Check These Available Vehicles.', 'info')
             return redirect(url_for('vehicles'))
 
     return render_template('VehicleSearch.html', title='Search Vehicle', form=form)
@@ -346,7 +346,7 @@ def BookVehicle():
         vehicle_count = VehicleCount.query.filter_by(vehicle_type=form.vehicle_type.data).first()
 
         if existing_booking or (vehicle_count and vehicle_count.count == 0):
-            flash('The car is booked. Please check another vehicle or date.')
+            flash(' * The vehicle is booked. Please check another vehicle or date.')
             return redirect(url_for('BookVehicle'))  # Redirect back to the booking page
         else:
             # Book the vehicle
@@ -368,7 +368,7 @@ def BookVehicle():
             vehicle_count.count -= 1
 
             db.session.commit()
-            flash('Successfully booked')
+            flash(' * Successfully booked')
 
     return render_template('BookVehicle.html', form=form)
 

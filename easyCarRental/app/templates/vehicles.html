@@ -14,8 +14,21 @@
             <li style="margin-bottom: 5px;"><strong>Color:</strong> {{ car.color }}</li>
             <li style="margin-bottom: 5px;"><strong>Price:</strong> {{ car.price }}</li>
             <li style="margin-bottom: 5px;"><strong>Condition:</strong> {{ car.condition }}</li>
-        <form action="{{ url_for('BookVehicle') }}" method="post" style="margin-left: 0%; width: 10%;">
+           
+            <form action="{{ url_for('BookVehicle', vehicle_id=car.VehicleId, vehicle_type=car.vehicle) }}" method="post" style="margin-left: 0%; width: 10%;">
+
+
+          <input type="hidden" name="VehicleId" value="{{ car.VehicleId }}">
+
+          {% if car.available %}
+
           <button style="background-color: rgb(0, 204, 255); padding: 10px; border-radius: 5px; cursor: pointer; font-weight: bold;" type="submit" class="btn">Book Vehicle</button>
+
+          {% else %}
+
+          <button style="background-color: rgb(255, 0, 0); padding: 10px; border-radius: 5px; cursor: not-allowed; font-weight: bold;" type="button" class="btn" disabled>Already Booked</button>
+            {% endif %}
+
         </form>
           <div style="display: flex; justify-content: right; margin-top: -220px;">
           {% if car.photo1 %}

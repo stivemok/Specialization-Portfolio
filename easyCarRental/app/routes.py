@@ -524,7 +524,7 @@ def update_user():
         if user:
             user.username = form.username.data
             user.email = form.email.data
-            user.password = form.password.data  # Consider using a hashed password
+            user.password = form.password.data  
             db.session.commit()
         return redirect(url_for('users'))
     return render_template('update_user.html', form=form)

@@ -42,11 +42,11 @@
             </div>
           </div>
           <div style="display: flex; flex-wrap: wrap;">
-            <div class="name" style=" padding: 10px; flex: 3;">
+            <div class="name" style=" padding: 10px; flex: 1;">
               {{ form.pickup_location.label }}
               {{ form.pickup_location(id="pickup-location") }}
             </div>
-            <div class="name" style="padding: 10px; flex: 3;">
+            <div class="name" style="padding: 10px; flex: 1;">
               {{ form.dropoff_location.label }}
               {{ form.dropoff_location(id="dropoff-location") }}
             </div>
@@ -54,7 +54,7 @@
               <label>Selected Vehicle Type</label>
               <p>{{ car.vehicle }}</p>
             </div>
-            <div class="name" style="padding: 10px; flex: 3;">
+            <div class="name" style="padding: 10px; flex: 1; ">
               {{ form.PaymentMethod.label }}
               {{ form.PaymentMethod(size=32, required=true) }}
             </div>
@@ -66,4 +66,13 @@
           </div>
         </form>
     </section>
+    <style>
+      #PaymentMethod {
+         width: 100%;
+         height: 60px;
+      }
+      #PaymentMethod :hover{
+        background-color: blueviolet;
+      }
+    </style>
 {% endblock %}

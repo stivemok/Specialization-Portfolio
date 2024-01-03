@@ -51,7 +51,7 @@ class CarRentalForm(FlaskForm):
     make = StringField('Make', validators=[DataRequired()], render_kw={"required": True})
     model = StringField('Model', validators=[DataRequired()], render_kw={"required": True})
     color = StringField('Color', validators=[DataRequired()], render_kw={"required": True})
-    price = StringField('Price', validators=[DataRequired()], render_kw={"required": True})
+    price = StringField('Price $', validators=[DataRequired()], render_kw={"required": True})
     condition = StringField('Condition', validators=[DataRequired()], render_kw={"required": True})
     vehicle = SelectField('Vehicle Type', choices=[('sedan', 'Sedan'), ('suv', 'SUV'), ('truck', 'Truck'), ('van', 'Van')], validators=[DataRequired()])
     year = IntegerField('Release Year', validators=[DataRequired()], render_kw={"min": "1900", "max": "2023", "required": True})

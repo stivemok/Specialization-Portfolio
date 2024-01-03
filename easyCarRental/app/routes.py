@@ -1,11 +1,11 @@
-from urllib.parse import urlsplit # split URL into its components
-from flask import render_template, flash, redirect, url_for, request # Flask’s web development functionalities
-from flask_login import login_user, logout_user, current_user, login_required # Flask-Login, a library for managing user sessions
-import sqlalchemy as sa # SQL toolkit and Object-Relational Mapping (ORM) system
+from urllib.parse import urlsplit
+from flask import render_template, flash, redirect, url_for, request
+from flask_login import login_user, logout_user, current_user, login_required
+import sqlalchemy as sa
 from app import app, db
 from app.forms import LoginForm, RegistrationForm, CarRentalForm
 from app.models import User, FormData, Car, Booking, VehicleCount
-from datetime import datetime # module to work with dates and times
+from datetime import datetime
 from app.forms import VehicleSearchForm, CarInformationForm, RemoveCarForm, CarUpdateForm 
 from app.forms import BookVehicleForm, UpdateUserForm
 from flask import jsonify
@@ -18,17 +18,11 @@ from flask import current_app
 
 
 
-""" 
-    Defining a route for Flask application.
-    Decorators tell Flask what URL should trigger the function that follows
-"""
-
 @app.route('/')
 @app.route('/index')
-def index(): # Function triggered when a user accesses the / or /index URL 
-    form = VehicleSearchForm() # Creates an instance of the VehicleSearchForm class
-    favicon_url = url_for('static', filename='css/login.css')
-    return render_template("index.html", title='Welcome to', form=form, favicon_url=favicon_url) # Renders the index.html template
+def index():
+    form = VehicleSearchForm()
+    return render_template("index.html", title='Home Page', form=form)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -40,13 +34,13 @@ def login():
         user = db.session.scalar(
             sa.select(User).where(User.username == form.username.data))
         if user is None or not user.check_password(form.password.data):
-            flash(' * Invalid username or password')
+            flash('Invalid username or password')
             return redirect(url_for('login'))
         login_user(user, remember=form.remember_me.data)
         next_page = request.args.get('next')
         if not next_page or urlsplit(next_page).netloc != '':
             next_page = url_for('admin')
-            flash(f' * Successfully logged in as {user.username}', 'success')
+            flash(f'Successfully logged in as {user.username}', 'success')
         return redirect(next_page)
     return render_template('login.html', title='Sign In', form=form)
 
@@ -64,7 +58,7 @@ def register():
         user.set_password(form.password.data)
         db.session.add(user)
         db.session.commit()
-        flash(' * Congratulations, you are now a registered user!')
+        flash('Congratulations, you are now a registered user!')
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
@@ -82,7 +76,7 @@ def VehicelRegistration():
         existing_entry = FormData.query.filter_by(PlateNo=form.PlateNo.data).first()
 
         if existing_entry:
-            flash(' * The vehicle is already registered. Please register another', 'error')
+            flash('the car is already registered. Please register another', 'error')
         else:
             # Read the photo data once
             photo1_data = form.photo1.data.read()
@@ -115,7 +109,7 @@ def VehicelRegistration():
 
             
 
-            flash(' * Successfully registered your vehicle!', 'success')
+            flash('Successfully registered your car!', 'success')
             return redirect(url_for('VehicelRegistration'))
 
     return render_template("VehicelRegistration.html", title='VehicelRegistration', form=form)
@@ -154,7 +148,7 @@ def AddCar():
     if form.validate_on_submit():
         existing_car = Car.query.filter_by(PlateNo=form.PlateNo.data).first()
         if existing_car:
-            flash(' * This vehicle is already registered!', 'error')
+            flash('This car is already registered!', 'error')
             return render_template('AddCar.html', title='add car', form=form)
 
         new_car = Car(
@@ -181,7 +175,7 @@ def AddCar():
 
         db.session.commit()
 
-        flash(' * Successfully added a vehicle!', 'success')
+        flash('Successfully added a car!', 'success')
         return redirect(url_for('AddCar'))
 
     return render_template('AddCar.html', title='add car', form=form)
@@ -231,7 +225,7 @@ def remove_car():
 
         db.session.commit()
 
-        flash(' * Successfully removed selected vehicle(s)!', 'success')
+        
         return redirect(url_for('remove_car'))
 
     return render_template('remove_car.html', title='Remove Car', form=form, cars=cars)
@@ -261,7 +255,7 @@ def UpdateCar():
 
         db.session.commit()
 
-        flash(' * Vehicle updated successfully!', 'success')
+        flash('Car updated successfully!', 'success')
         return redirect(url_for('UpdateCar'))
 
     return render_template('UpdateCar.html', title='Update Car', form=form, cars=cars)
@@ -317,7 +311,7 @@ def SearchVehicle():
 
         else:
             # Vehicle not found
-            flash('* No Vehicle(s) Found! Please Check These Available Vehicles.', 'info')
+            flash('No vehicle found! Please check these cars.', 'info')
             return redirect(url_for('vehicles'))
 
     return render_template('VehicleSearch.html', title='Search Vehicle', form=form)
@@ -351,11 +345,6 @@ def BookVehicle(vehicle_id, vehicle_type):
             payment_method_result = submit_payment(form.PaymentMethod.data)
             flash(f'Payment Result: {payment_method_result}')
 
-        if existing_booking or (vehicle_count and vehicle_count.count == 0):
-            flash(' * The vehicle is booked. Please check another vehicle or date.')
-            return redirect(url_for('BookVehicle'))  # Redirect back to the booking page
-        else:
-            # Book the vehicle
             booking = Booking(
                 pickup_date=form.pickup.data,
                 pickup_location=form.pickup_location.data,
@@ -379,8 +368,7 @@ def BookVehicle(vehicle_id, vehicle_type):
                 vehicle_count.count -= 1
 
             db.session.commit()
-
-            flash(' * Successfully booked')
+            flash('Successfully booked')
             return redirect(url_for('BookVehicle', vehicle_id=vehicle_id, vehicle_type=vehicle_type))
 
         except Exception as e:

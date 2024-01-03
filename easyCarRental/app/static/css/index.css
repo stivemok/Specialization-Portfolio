@@ -1,8 +1,3 @@
-h3, p, ul, li {
-    margin: 0;
-    padding: 0;
-}
-
 body {
         background-color: white;
         font-family: Arial, sans-serif;
@@ -19,22 +14,39 @@ body {
         border-spacing: 10px;
         
     }
-
 .carousel img {
-        width: 100%;
-        height: 100%;
+    width: 100%;
+    height: 100%;
     }
-@keyframes slide{
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-100%);}
+.mobile-carousel img {
+    display: none;
 }
 .slides {
-        margin-right: 2dvh;
         display: flex;
-        /* animation: slide 30s infinite linear; */
         transition: transform 0.5s ease-in;
     }
-
+@media screen and (max-width: 1222px) {
+    
+    .carousel img {
+        width: 100%;
+        height: 10%;
+        }
+    .mobile-carousel {
+        max-width: 800px;
+	    margin: auto;
+        overflow: scroll;
+        float: inline-start;
+        border-radius: 30px;
+        border-spacing: 10px;
+    }
+    .slides {
+        display: flex;
+        transition: transform 0.5s ease-in;
+    }
+    .booking-form{
+        margin: 80%;
+    }
+    } 
 
 .booking-form {
     background-color: rgba(201, 195, 195, 0.788);
@@ -42,35 +54,17 @@ body {
     border-radius: 20px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
     width: 400px;
-    box-sizing: border-box; /*Doesnt work=>prevents overflow of form padding and border*/
+    box-sizing: border-box; 
     border: 1px solid #ccc;
     margin-left: 0;
 }
-
+.mobilebooking-form {
+    display: none;
+}
 .booking-form h2 {
     text-align: center;
     
 }
-
-.booking-form label {
-    font-weight: bold;
-}
-
-.booking-form select {
-    width: 76%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #b4b0b0;
-    border-radius: 4px;
-}
-.booking-form input[type="date"] {
-    width: 70%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #b4b0b0;
-    border-radius: 4px;
-}
-
 .booking-form button {
     display: block;
     width: 50%;
@@ -90,8 +84,8 @@ footer {
     background-color: #333;
     color: white;
     display: flex;
-    align-items: center; /*aligns vertically*/
-    justify-content: center; /*aligns horizontaly*/
+    align-items: center;
+    justify-content: center;
     position: fixed;
     bottom: 0;
     padding: 10px;

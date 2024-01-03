@@ -15,10 +15,23 @@
                 <img src="../static/css/cars/carousel/Honda-HR-V 2.jpg" alt="Honda-HR-V">
                 <img src="../static/css/cars/carousel/Toyota CRV.jpg" alt="Toyota CRV">
                 <img src="../static/css/cars/carousel/F150 Silver.png" alt="Ford 150">
-                
-                 
             </div>
         </div>
+        <div class="mobile-carousel">
+          <div class="slides">
+              <img src="../static/css/cars/carousel/Mercediz.jpg" alt="Mercedic">
+              <img src="../static/css/cars/carousel/land cruser 1.jfif" alt="Toyota v8">
+              <img src="../static/css/cars/carousel/Elantra grey 2.jpg" alt="Elantra">
+              <img src="../static/css/cars/carousel/VW ID.6.webp" alt="VW ID.6">
+              <img src="../static/css/cars/carousel/Tacoma.png" alt="Tacoma">
+              <img src="../static/css/cars/carousel/Honda-HR-V 1.jpg" alt="Honda-HR-V">
+              <img src="../static/css/cars/carousel/Toyota camrey.jpg" alt="Toyota camrey">
+              <img src="../static/css/cars/carousel/Toyota Fortuner.jfif" alt="Toyota Fortuner">
+              <img src="../static/css/cars/carousel/Honda-HR-V 2.jpg" alt="Honda-HR-V">
+              <img src="../static/css/cars/carousel/Toyota CRV.jpg" alt="Toyota CRV">
+              <img src="../static/css/cars/carousel/F150 Silver.png" alt="Ford 150">
+          </div>
+      </div>
 
 
        <!-- Vehicle booking form -->
@@ -43,11 +56,34 @@
             <img src="../static/css/cars/icons/truck.jfif" alt="truck" style="width: 27%; height: 27%; display: flex; margin: auto; margin-top: -50px;"><br>
             <div class="submit">
               <button type="submit" class="btn btn-primary" style="width: 50%;">Search Vehicle</button>
-              <!-- {{ form.submit() }} -->
             </div>
         </form>
       </section>
-      
+      <section class="mobilebooking-form">
+        <h2>Search a Vehicle</h2>
+        <form action="/SearchVehicle" method="POST">
+            {{ form.hidden_tag() }}
+            <label for="sedan">{{ form.sedan.label }}</label>
+            {{ form.sedan }}
+            <img src="../static/css/cars/icons/sedan1.png" alt="sedan" style="width: 30%; height: 30%; display: flex; margin: auto; margin-top: -70px;"><br><br>
+            <label for="compact">{{ form.compact.label }}</label>
+            {{ form.compact }}
+            <img src="../static/css/cars/icons/compact.jpg" alt="compact" style="width: 30%; height: 30%; display: flex; margin: auto; margin-top: -70px;"><br>
+            <label for="suv">{{ form.suv.label }}</label>
+            {{ form.suv }}
+            <img src="../static/css/cars/icons/suv3.png" alt="suv" style="width: 30%; height: 30%; display: flex; margin: auto; margin-top: -75px;"><br><br>
+            <label for="van">{{ form.van.label }}</label>
+            {{ form.van }}
+            <img src="../static/css/cars/icons/van1.png" alt="van" style="width: 45%; height: 45%; display: flex; margin: auto; margin-top: -70px;"><br><br>
+            <label for="truck">{{ form.truck.label }}</label>
+            {{ form.truck }}
+            <img src="../static/css/cars/icons/truck.jfif" alt="truck" style="width: 27%; height: 27%; display: flex; margin: auto; margin-top: -50px;"><br>
+            <div class="submit">
+              <button type="submit" class="btn btn-primary" style="width: 50%;">Search Vehicle</button>
+            </div>
+        </form>
+      </section>
+       
   </body>
     
   <footer>

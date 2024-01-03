@@ -1,10 +1,10 @@
 {% extends "base.html" %}
-
+<!-- <link href="../static/css/about.css" rel="stylesheet" type="text/css" /> -->
 {% block content %}
 
 <div class = "about">
     <h1>About Easy Car Rental</h1>
-    <!-- <h1>About Easy Carsdf Rental</h1> -->
+   
 </div>
 <h2>Introduction</h2>
 <p>Easy Car Rental is a car rental company that provides affordable and convenient car rental services to customers. 
@@ -22,7 +22,7 @@
         <img src="./../static/css/cars/Demo/abouticon.png" alt="Team Member Name">
         <h3>Estifanos Getahun</h3>
         <p>Fullstack
-            Responsibilities: Planning, coordination, and monitoring of project activities, defining scope, schedule, HTML, CSS integrate with external APIs (Google Map) and team communication.
+            Responsibilities: Planning, coordination, and monitoring of project activities, defining scope, schedule, HTML, CSS integrate with external APIs (Google Map), third party service (GPS tracker) and team communication.
             </p>
       </div>
       <div class="team-member">
@@ -51,9 +51,91 @@
 <ul>
     <li><strong>Email:</strong> info@easycarrental.com</li>
     <li><strong>Phone:</strong> +251 (555) 123-4567</li>
-    <li><strong>Address:</strong> ruwanda  Street, Addis Ababa Ethiopia</li>
+    <li><strong>Address:</strong> Gabon  Street, Addis Ababa Ethiopia</li>
 </ul>
->>>>>>> eec7cd9b0cf3aaf6479569cf030d65fac4776fa8
+
 </body>
+<style>
+    /* body {
+    font-family: sans-serif;
+    margin: 20px;
+    padding: 10px;
+    background-color: #f5f5f5;
+  } */
+  
+  .about {
+    text-align: center;
+    background-color: #ffffff;
+  }
+  
+  .about h1 {
+    font-size: 48px;
+    font-weight: 300;
+    margin-bottom: 20px;
+    
+  }
+  
+  h2 {
+    font-size: 24px;
+    font-weight: 400;
+    margin-top: 50px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  p {
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    text-align: center;
+  }
+  
+  ul li {
+    margin-bottom: 10px;
+    text-align: center;
+  }
+  
+  ul li strong {
+    font-weight: 600;
+  }
+  
+  blockquote {
+    border-left: 5px solid #ccc;
+    padding: 15px;
+    margin: 20px 0;
+  }
+  /*Team*/
+  .team {
+    display: flex;
+    flex-direction: row; 
+    align-items: flex-start; /* Center cards horizontally */
+    margin: 8%;
+    width: 50%; /* Define a maximum width for responsive layout */
+    margin-top: 50px;
+  }
+  
+  .team-member {
+    width: 300px;
+    margin-bottom: 30px; /* Adjust spacing between cards */
+    text-align: center;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    margin: 10px;
+    padding: 10px;
+  }
+  
+  .team-member img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover; /* Ensure image fills the container */
+    border-radius: 5px 5px 0 0;
+  }
+</style>
 
 {% endblock %}

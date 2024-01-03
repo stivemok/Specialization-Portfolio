@@ -12,23 +12,30 @@
             background-color: rgb(0, 204, 255);
             padding: 10px;
             display: flex;
+            /* display: inline-block; */
             justify-content: space-between;
             align-items: center;
             border-width: 20px;
             border-radius: 20px;
         }
+        nav ul.mobile {
+            display: none;
+        }
+        @media screen and (max-width: 842px) {
+            nav ul.laptop{
+                display: none;
+            }
+            nav ul.mobile{
+                display: inline-block;
+            }
+        }
         
         nav ul {
-            /* padding: 0;
-            margin: 0;
-            display: flex;
-            flex-wrap: wrap; */
             list-style: none;
             display: flex;
         }
 
         nav li {
-            /* list-style: none; */
             margin-right: 20px;
         }
 
@@ -38,8 +45,7 @@
             display: block;
             padding: 10px 15px;
             position: relative;
-            /* text-decoration: none;
-            color: darkblue; */
+            
         }
         nav a:before{
             content: '';
@@ -72,10 +78,7 @@
         }
 
         nav a:active {
-            background-color: #8e54b5;
-
-            /* color: blueviolet; 
-             background-color: blueviolet;  */
+            background-color: blueviolet;
         }
         nav a:hover:before, ul li a:hover:after{
             transform: scaleX(1);
@@ -86,15 +89,12 @@
             padding: 5px;
         }
         .logodiv a:hover{
-            background-color: transparent!important;
-            transform: scale(1.3);
+            background-color: transparent;
+            transform: scale(1.5);
         }
         .logodiv h1{
             margin: 0px;
-            padding: 10px;
-            font-size: 30px;
-            font-family: 'Exo', sans-serif;
-            font-weight: 600;
+            padding: 15px;
         }
     </style>
     <head>
@@ -106,9 +106,10 @@
 
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+        <link rel="icon" href="{{ url_for('static', filename='css/cars/Demo/logo.png') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/index.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/vehicles.css') }}">
     </head>
     <body>
         <header>
@@ -118,7 +119,7 @@
                 <h1>Easy Car Rental</h1>
             </div>
             <nav>
-                <ul>
+                <ul class="mobile">
                     <li><a href="{{ url_for('index') }}">Home</a></li>
                     <li><a href="{{ url_for('vehicles') }}">Vehicles</a></li>
                     <li><a href="{{ url_for('VehicelRegistration') }}">Vehicel Registration</a></li>
@@ -126,7 +127,20 @@
                     <li><a href="{{ url_for('about') }}">About</a></li>
         
                     {% if current_user.is_anonymous %}
-                    <li><a href="{{ url_for('login') }}"></a></li>
+                    <li style="display: none;"><a href="{{ url_for('login') }}"> Log In</a></li>
+                    {% else %}
+                    <li><a href="{{ url_for('logout') }}">Log Out</a></li>
+                    {% endif %}
+                </ul>
+                <ul class="laptop">
+                    <li><a href="{{ url_for('index') }}">Home</a></li>
+                    <li><a href="{{ url_for('vehicles') }}">Vehicles</a></li>
+                    <li><a href="{{ url_for('VehicelRegistration') }}">Vehicel Registration</a></li>
+                    <li><a href="{{ url_for('location') }}">Location</a></li>
+                    <li><a href="{{ url_for('about') }}">About</a></li>
+        
+                    {% if current_user.is_anonymous %}
+                    <li style="display: none;"><a href="{{ url_for('login') }}">Log In</a></li>
                     {% else %}
                     <li><a href="{{ url_for('logout') }}">Log Out</a></li>
                     {% endif %}

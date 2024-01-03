@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block content %}
+  <h2 style="margin-left: 40%;">Update Booking</h2>
+
+  <form method="post" action="{{ url_for('update_booking') }}" enctype="multipart/form-data">
+    {{ form.hidden_tag() }}
+
+    <div class="form-group">
+        <label for="booking_id">Select Booking:</label>
+        <select name="booking_id" class="form-control">
+          {% for booking in bookings %}
+            <option value="{{ booking.id }}" {% if form.booking_id.data == booking.id %}selected{% endif %}>
+              {{ booking.fname }} {{ booking.mname }} - Booking {{ booking.id }}
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+      
+
+    <!-- Display only when a booking is selected -->
+    {% if form.booking_id.data %}
+      {% set selected_booking = bookings | selectattr('id', 'equalto', form.booking_id.data) | first %}
+
+      <div class="form-group">
+        {{ form.fname.label }}
+        {{ form.fname(class="form-control", value=selected_booking.fname) }}
+      </div>
+
+      <div class="form-group">
+        {{ form.mname.label }}
+        {{ form.mname(class="form-control", value=selected_booking.mname) }}
+      </div>
+
+      <div class="form-group">
+        {{ form.lname.label }}
+        {{ form.lname(class="form-control", value=selected_booking.lname) }}
+      </div>
+
+      <div class="form-group">
+        {{ form.idpassport.label }}
+        {{ form.idpassport(class="form-control") }}
+      </div>
+
+      <div class="form-group">
+        {{ form.pickup.label }}
+        {{ form.pickup(class="form-control", value=selected_booking.pickup) }}
+      </div>
+
+      <div class="form-group">
+        {{ form.pickup_location.label }}
+        {{ form.pickup_location(class="form-control", value=selected_booking.pickup_location) }}
+      </div>
+
+      <div class="form-group">
+        {{ form.dropoff.label }}
+        {{ form.dropoff(class="form-control", value=selected_booking.dropoff) }}
+      </div>
+
+      <div class="form-group">
+        {{ form.dropoff_location.label }}
+        {{ form.dropoff_location(class="form-control", value=selected_booking.dropoff_location) }}
+      </div>
+
+      <div class="form-group">
+        {{ form.vehicle_type.label }}
+        {{ form.vehicle_type(class="form-control", value=selected_booking.vehicle_type) }}
+      </div>
+
+      <div class="form-group">
+        {{ form.PaymentMethod.label }}
+        {{ form.PaymentMethod(class="form-control", value=selected_booking.PaymentMethod) }}
+      </div>
+
+      <div class="form-group">
+        {{ form.VehicleId.label }}
+        {{ form.VehicleId(class="form-control", value=selected_booking.VehicleId) }}
+      </div>
+    {% endif %}
+
+    <button type="submit" class="btn btn-primary">Update Booking</button>
+  </form>
+
+
+  
+{% endblock %}

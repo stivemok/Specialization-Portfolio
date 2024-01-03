@@ -98,6 +98,7 @@ class CarUpdateForm(FlaskForm):
     submit = SubmitField('Update Car')
 
 class BookVehicleForm(FlaskForm):
+    booking_id = IntegerField('BookingId')
     fname = StringField('First Name', validators=[DataRequired(), Length(max=32)])
     mname = StringField('Middle Name', validators=[DataRequired(), Length(max=32)])
     lname = StringField('Last Name', validators=[DataRequired(), Length(max=32)])

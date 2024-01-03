@@ -3,14 +3,6 @@
 {% block content %}
   <h2 style="margin-left: 40%;">Update Car</h2>
 
-  {% with messages = get_flashed_messages() %}
-    {% if messages %}
-      <div class="alert alert-info">
-        {{ messages[0] }}
-      </div>
-    {% endif %}
-  {% endwith %}
-
   <form method="post" action="{{ url_for('UpdateCar') }}" enctype="multipart/form-data">
     {{ form.hidden_tag() }}
 
@@ -18,11 +10,13 @@
       <label for="plate_no">Select Car:</label>
       <select name="plate_no" class="form-control">
         {% for car in cars %}
-          <option value="{{ car.PlateNo }}">{{ car.PlateNo }} - {{ car.make }} {{ car.model }}</option>
+          <option value="{{ car.PlateNo }}" {% if form.plate_no.data == car.PlateNo %}selected{% endif %}>
+            {{ car.PlateNo }} - {{ car.make }} {{ car.model }}
+          </option>
         {% endfor %}
       </select>
     </div>
-
+    
     <!-- Display only when a car is selected -->
     {% if form.plate_no.data %}
       {% set selected_car = cars | selectattr('PlateNo', 'equalto', form.plate_no.data) | first %}
@@ -30,7 +24,7 @@
       
       <div class="form-group">
         {{ form.plate_no.label }}
-        {{ form.plate_no(class="form-control", readonly="readonly", value=selected_car.PlateNo) }}
+        {{ form.plate_no(class="form-control", value=selected_car.PlateNo) }}
       </div>
 
       <div class="form-group">
@@ -77,8 +71,12 @@
         {{ form.photo2.label }}
         {{ form.photo2(class="form-control") }}
       </div>
+
+      <button type="button" class="btn btn-secondary" onclick="displayDetails()">Display Details</button>
+    
     {% endif %}
 
     <button type="submit" class="btn btn-primary">Update Car</button>
   </form>
+  
 {% endblock %}

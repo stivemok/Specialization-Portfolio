@@ -15,6 +15,10 @@ import logging
 from wtforms import BooleanField
 from app.api.api_routes import submit_payment,  get_cars, get_registrations
 from flask import current_app
+from flask import Flask, render_template
+import plotly
+import plotly.graph_objs as go
+import json
 
 
 
@@ -65,7 +69,27 @@ def register():
 @app.route('/admin')
 @login_required
 def admin():
-    return render_template("AdminPage.html", title='ADMIN Page')
+    user_count = User.query.count()
+    cars_count = Car.query.count()
+    # app.logger.info(f"Usersssssssssssss: {user_count}")
+    graphs = [
+        go.Figure(
+            data=[go.Bar(y=[2,1,3])],
+            layout_title_text="Vehicle Count"
+        ),
+        # go.Figure(
+        #     data=[go.Scatter(y=[4,2,5], mode='lines')],
+        #     layout_title_text="Number of Users"
+        # ),
+        go.Figure(
+            data=[go.Pie(labels=["Sedan", "Suv", "Label3"], values=[3,2,1])],
+            layout_title_text="Number Of Cars"
+        )
+        ]
+    graphJSON = [json.dumps(graph, cls=plotly.utils.PlotlyJSONEncoder) for graph in graphs]
+
+
+    return render_template("AdminPage.html", title='ADMIN Page', graphs=graphJSON, user_count=user_count, total_cars=cars_count)
 
 @app.route('/VehicelRegistration', methods=['GET', 'POST'])
 def VehicelRegistration():
@@ -134,7 +158,10 @@ def vehicles():
     api_data = response.get_json()
 
     cars = api_data.get('cars', [])
+    cars_count = cars.__len__()
     total_pages = api_data.get('total_pages', 1)
+    app.logger.info(f"Total pages: {total_pages}")
+    app.logger.info(f"cars : {cars}")
     current_page = api_data.get('current_page', 1)
 
     # Render the template using data from the API

@@ -19,6 +19,8 @@ from flask import Flask, render_template
 import plotly
 import plotly.graph_objs as go
 import json
+from sqlalchemy.exc import SQLAlchemyError
+from datetime import datetime
 
 
 
@@ -88,9 +90,9 @@ def admin():
         ]
     graphJSON = [json.dumps(graph, cls=plotly.utils.PlotlyJSONEncoder) for graph in graphs]
 
-
-    return render_template("AdminPage.html", title='ADMIN Page', graphs=graphJSON, user_count=user_count, total_cars=cars_count)
-
+    bookings = Booking.query.all()
+    return render_template("AdminPage.html", title='ADMIN Page', graphs=graphJSON, user_count=user_count, total_cars=cars_count ,bookings=bookings)
+    bookings = Booking.query.all()
 @app.route('/VehicelRegistration', methods=['GET', 'POST'])
 def VehicelRegistration():
     form = CarRentalForm()
@@ -352,6 +354,20 @@ def BookVehicle(vehicle_id, vehicle_type):
         return redirect(url_for('BookVehicle'))
 
     if form.validate_on_submit():
+
+        #check if pick up is not grater
+        if form.pickup.data > form.dropoff.data:
+            flash('Invalid date. Pickup date is  greater than dropoff date.')
+            return redirect(url_for('BookVehicle', vehicle_id=vehicle_id, vehicle_type=vehicle_type))
+
+        # Get the current date
+        current_date = datetime.now().date()
+
+
+        # Check if the pickup or drop-off date is in the past
+        if form.pickup.data < current_date or form.dropoff.data < current_date:
+            flash('Invalid date. Pickup and drop-off dates cannot be in the past.')
+            return redirect(url_for('BookVehicle', vehicle_id=vehicle_id, vehicle_type=vehicle_type))
         
         try:
             vehicle_type = form.vehicle_type.data
@@ -531,7 +547,39 @@ def update_user():
         if user:
             user.username = form.username.data
             user.email = form.email.data
-            user.password = form.password.data  # Consider using a hashed password
+            user.password = form.password.data  
             db.session.commit()
         return redirect(url_for('users'))
     return render_template('update_user.html', form=form)
+
+
+@app.route('/update_booking', methods=['GET', 'POST'])
+@login_required
+def update_booking():
+    form = BookVehicleForm()
+
+    # Fetch all available bookings
+    bookings = Booking.query.all()
+
+    if form.validate_on_submit():
+        # Fetch the selected booking by its id
+        selected_booking_id = form.booking_id.data
+        selected_booking = Booking.query.get_or_404(selected_booking_id)
+
+        # Update the selected booking with the form data
+        form.populate_obj(selected_booking)
+
+        # Handle ID Passport image update if needed
+        if form.idpassport.data:
+            selected_booking.idpassport = form.idpassport.data.read()
+
+        db.session.commit()
+
+        flash('Booking updated successfully!', 'success')
+        return redirect(url_for('update_booking'))
+
+    return render_template('update_booking.html', title='Update Booking', form=form, bookings=bookings)
+
+
+
+

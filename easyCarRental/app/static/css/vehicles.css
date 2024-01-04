@@ -1,0 +1,13 @@
+.mobile img {
+    display: none;
+} 
+@media screen and (max-width: 1300px){
+    .laptop img{
+        display: none;
+    }
+    .mobile img{
+        display: inline-block;
+        padding-left: 50%;
+    }
+
+}

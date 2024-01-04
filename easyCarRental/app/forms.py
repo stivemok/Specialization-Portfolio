@@ -51,7 +51,7 @@ class CarRentalForm(FlaskForm):
     make = StringField('Make', validators=[DataRequired()], render_kw={"required": True})
     model = StringField('Model', validators=[DataRequired()], render_kw={"required": True})
     color = StringField('Color', validators=[DataRequired()], render_kw={"required": True})
-    price = StringField('Price', validators=[DataRequired()], render_kw={"required": True})
+    price = StringField('Price $', validators=[DataRequired()], render_kw={"required": True})
     condition = StringField('Condition', validators=[DataRequired()], render_kw={"required": True})
     vehicle = SelectField('Vehicle Type', choices=[('sedan', 'Sedan'), ('suv', 'SUV'), ('truck', 'Truck'), ('van', 'Van')], validators=[DataRequired()])
     year = IntegerField('Release Year', validators=[DataRequired()], render_kw={"min": "1900", "max": "2023", "required": True})
@@ -98,10 +98,11 @@ class CarUpdateForm(FlaskForm):
     submit = SubmitField('Update Car')
 
 class BookVehicleForm(FlaskForm):
+    booking_id = IntegerField('BookingId')
     fname = StringField('First Name', validators=[DataRequired(), Length(max=32)])
     mname = StringField('Middle Name', validators=[DataRequired(), Length(max=32)])
     lname = StringField('Last Name', validators=[DataRequired(), Length(max=32)])
-    idpassport = FileField('ID/Passport', validators=[DataRequired()], render_kw={"accept": "image/*", "required": True})
+    idpassport = FileField('ID/Passport/Driving licence', validators=[DataRequired()], render_kw={"accept": "image/*", "required": True})
     pickup = DateField('Pickup Date', format='%Y-%m-%d', validators=[DataRequired()])
     pickup_location = SelectField('Pickup Location', choices=[('Easy Rentals Office', 'Easy Rentals Office'), ('ADD Airport', 'ADD Airport')], validators=[DataRequired()])
     dropoff = DateField('Dropoff Date', format='%Y-%m-%d', validators=[DataRequired()])

@@ -160,8 +160,6 @@ def vehicles():
     cars = api_data.get('cars', [])
     cars_count = cars.__len__()
     total_pages = api_data.get('total_pages', 1)
-    app.logger.info(f"Total pages: {total_pages}")
-    app.logger.info(f"cars : {cars}")
     current_page = api_data.get('current_page', 1)
 
     # Render the template using data from the API

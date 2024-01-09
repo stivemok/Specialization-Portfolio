@@ -116,7 +116,6 @@ def get_registrations():
 @app.route('/api/submit_payment', methods=['POST'])
 def submit_payment(payment_method):
     # Simulate payment logic based on the selected payment method
-    # Replace this with your actual payment logic
     if payment_method == 'CBE':
         return 'Payment successful via CBE.'
     elif payment_method == 'paypal':

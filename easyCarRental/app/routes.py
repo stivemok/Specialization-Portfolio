@@ -23,14 +23,14 @@ from sqlalchemy.exc import SQLAlchemyError
 from datetime import datetime
 
 
-
+""" Flask route for the home page """
 @app.route('/')
 @app.route('/index')
 def index():
     form = VehicleSearchForm()
     return render_template("index.html", title='Home Page', form=form)
 
-
+""" User login"""
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
@@ -50,11 +50,14 @@ def login():
         return redirect(next_page)
     return render_template('login.html', title='Sign In', form=form)
 
+"""Logging out a user"""
 @app.route('/logout')
 def logout():
-    logout_user()
+    logout_user() # from flask-login to clear user's session
+    flash('Successfully logged out')
     return redirect(url_for('login'))
 
+"""Registration route to register an admin"""
 @app.route('/register', methods=['GET', 'POST'])
 def register():
     
@@ -68,12 +71,12 @@ def register():
         return redirect(url_for('login'))
     return render_template('register.html', title='Register', form=form)
 
+"""Administrator route to the admin dashboared"""
 @app.route('/admin')
 @login_required
 def admin():
     user_count = User.query.count()
     cars_count = Car.query.count()
-    # app.logger.info(f"Usersssssssssssss: {user_count}")
     graphs = [
         go.Figure(
             data=[go.Bar(y=[2,1,3])],
@@ -91,20 +94,22 @@ def admin():
     graphJSON = [json.dumps(graph, cls=plotly.utils.PlotlyJSONEncoder) for graph in graphs]
 
     bookings = Booking.query.all()
-    return render_template("AdminPage.html", title='ADMIN Page', graphs=graphJSON, user_count=user_count, total_cars=cars_count ,bookings=bookings)
+    return render_template("AdminPage.html", title='ADMIN Page',  user_count=user_count, total_cars=cars_count ,bookings=bookings)
     bookings = Booking.query.all()
+
+"""Route to register vehicles"""
 @app.route('/VehicelRegistration', methods=['GET', 'POST'])
 def VehicelRegistration():
     form = CarRentalForm()
 
     if form.validate_on_submit():
-        # Check if the plate number already exists in the database
+        # Checks if the plate number already exists in the database
         existing_entry = FormData.query.filter_by(PlateNo=form.PlateNo.data).first()
 
         if existing_entry:
             flash('the car is already registered. Please register another', 'error')
         else:
-            # Read the photo data once
+            # Read photo data once
             photo1_data = form.photo1.data.read()
             photo2_data = form.photo2.data.read()
 
@@ -133,23 +138,22 @@ def VehicelRegistration():
             db.session.add(new_entry)
             db.session.commit()
 
-            
-
             flash('Successfully registered your car!', 'success')
             return redirect(url_for('VehicelRegistration'))
 
     return render_template("VehicelRegistration.html", title='VehicelRegistration', form=form)
 
-
+"""route about easy car rental"""
 @app.route('/about')
 def about():
     return render_template('about.html')
 
+"""lacation route"""
 @app.route('/location')
 def location():
     return render_template('location.html')
 
-
+"""available vehicles route"""
 @app.route('/vehicles', methods=['GET'])
 def vehicles():
     page = request.args.get('page', default=1, type=int)
@@ -164,10 +168,9 @@ def vehicles():
     total_pages = api_data.get('total_pages', 1)
     current_page = api_data.get('current_page', 1)
 
-    # Render the template using data from the API
     return render_template('vehicles.html', cars=cars, total_pages=total_pages, current_page=current_page)
 
-
+"""admin dashboared to add a car"""
 @app.route('/AddCar', methods=['GET', 'POST'])
 @login_required
 def AddCar():
@@ -207,7 +210,7 @@ def AddCar():
 
     return render_template('AddCar.html', title='add car', form=form)
 
-
+"""customers registered information"""
 @app.route('/UserInfo', methods=['GET'])
 def UserInfo():
     page = request.args.get('page', default=1, type=int)
@@ -221,9 +224,9 @@ def UserInfo():
     total_pages = api_data.get('pagination', {}).get('total_pages', 1)
     current_page = api_data.get('pagination', {}).get('current_page', 1)
 
-    # Render the template using data from the API
     return render_template('UserInfo.html', registrations=registrations, total_pages=total_pages, current_page=current_page)
 
+"""admin dashboared to remove a car"""
 @app.route('/remove_car', methods=['GET', 'POST'])
 @login_required
 def remove_car():
@@ -252,12 +255,11 @@ def remove_car():
 
         db.session.commit()
 
-        
         return redirect(url_for('remove_car'))
 
     return render_template('remove_car.html', title='Remove Car', form=form, cars=cars)
 
-
+"""admin dashboared to update a registered vehicle information"""
 @app.route('/UpdateCar', methods=['GET', 'POST'])
 @login_required
 def UpdateCar():
@@ -287,7 +289,7 @@ def UpdateCar():
 
     return render_template('UpdateCar.html', title='Update Car', form=form, cars=cars)
 
-
+"""route for searching selected vehicles"""
 @app.route('/SearchVehicle', methods=['GET', 'POST'])
 def SearchVehicle():
     form = VehicleSearchForm()
@@ -343,7 +345,7 @@ def SearchVehicle():
 
     return render_template('VehicleSearch.html', title='Search Vehicle', form=form)
 
-
+"""booked vehicle route"""
 @app.route('/BookVehicle/<int:vehicle_id>/<vehicle_type>', methods=['GET', 'POST'])
 def BookVehicle(vehicle_id, vehicle_type):
     form = BookVehicleForm()
@@ -420,14 +422,14 @@ def BookVehicle(vehicle_id, vehicle_type):
 
     return render_template('BookVehicle.html', form=form, car=car)
 
-
+"""vehicle count route"""
 @app.route('/vehicle_count', methods=['GET'])
 @login_required
 def vehicle_count():
     counts = VehicleCount.query.all()
     return render_template('vehicle_count.html', title='Avaliable Vehicles', counts=counts)
 
-
+""""""
 @app.route('/BookedVehicle', methods=['GET', 'POST'])
 @login_required
 def BookedVehicle():

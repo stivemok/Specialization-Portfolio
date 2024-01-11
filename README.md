@@ -1,5 +1,6 @@
 
 # ✨Specialization Portfolio Project-Webstack✨
+![landing page](https://github.com/stivemok/Specialization-Portfolio/assets/118950066/c66e6bfb-2953-438e-b663-405945fbd88d)
 
 Welcome to the Easy Car Rental website! Our website offers a simple and convenient way to book rental cars, register your car for rental, and manage your account through our admin login. Here’s a brief overview of our main features:
 

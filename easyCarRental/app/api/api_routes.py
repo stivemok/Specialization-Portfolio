@@ -66,7 +66,7 @@ def get_registrations():
                 idpassport_base64 = base64.b64encode(registration.idpassport).decode('utf-8') if registration.idpassport else None
                 photo1_base64 = base64.b64encode(registration.photo1).decode('utf-8') if registration.photo1 else None
                 photo2_base64 = base64.b64encode(registration.photo2).decode('utf-8') if registration.photo2 else None
-            
+
                 registrations_list.append({
                     'CustomerId': registration.CustomerId,
                     'fname': registration.fname,
@@ -111,15 +111,15 @@ def get_registrations():
 
     except Exception as e:
         return jsonify({'error': 'Internal Server Error'}), 500
-    
+
 
 @app.route('/api/submit_payment', methods=['POST'])
 def submit_payment(payment_method):
     # Simulate payment logic based on the selected payment method
     if payment_method == 'CBE':
         return 'Payment successful via CBE.'
-    elif payment_method == 'paypal':
-        return 'Payment successful via Paypal.'
+    elif payment_method == 'pay on pickup':
+        return 'Please pay on pickup date.'
     elif payment_method == 'telebirr':
         return 'Payment successful via Telebirr.'
     else:

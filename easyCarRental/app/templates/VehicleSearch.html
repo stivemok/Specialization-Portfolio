@@ -6,7 +6,7 @@
         {% if cars %}
             <ul style="list-style: none; padding: 20;" class="car-list">
                 {% for car in cars %}
-                    <li style="margin-bottom: 20px; padding: 20px; width: 80%; border: 1px solid #ccc;" class="car-item">
+                    <li style="margin-bottom: 90px; padding: 10px; width: 80%;" class="car-item">
                         <strong>{{ car.make }} {{ car.model }}</strong>
                         <ul style="list-style: none; padding: 20px;" class="car-details">
                             <li style="margin-bottom: 5px;"><strong>Vehicle:</strong> {{ car.vehicle }}</li>
@@ -16,7 +16,7 @@
                             <li style="margin-bottom: 5px;"><strong>Condition:</strong> {{ car.condition }}</li>
                             
                             
-                            <form action="{{ url_for('BookVehicle', vehicle_id=car.VehicleId, vehicle_type=car.vehicle) }}" method="post" style="margin-left: 0%; width: 10%;">
+                            <form action="{{ url_for('BookVehicle', vehicle_id=car.VehicleId, vehicle_type=car.vehicle) }}" method="post" style="margin: 10px; width: fit-content;">
 
 
                                 <input type="hidden" name="VehicleId" value="{{ car.VehicleId }}">
@@ -32,17 +32,24 @@
                       
                               </form>
 
-
-                        <div style="display: flex; justify-content: right; margin-top: -220px;">
-                        {% if car.photo1 %}
-                            <img style="max-width: 100%; height: auto; max-width: 400px;" class="car-photo" src="data:image/jpeg;base64,{{ car.photo1 }}" alt="Photo 1">
-                        {% endif %}
-                        {% if car.photo2 %}
-                            <img style="max-width: 100%; height: auto; max-width: 400px;" class="car-photo" src="data:image/jpeg;base64,{{ car.photo2 }}" alt="Photo 2">
-                        {% endif %}
-                        </div>
-                        </ul>
-                    </li>
+			<div class="laptop" style="display: flex; justify-content: right; margin-top: -220px;">
+		          {% if car.photo1 %}
+            		<img style="max-width: 100%; max-width: 400px;" class="car-photo" src="data:image/jpeg;base64,{{ car.photo1 }}" alt="Photo 1">
+          		{% endif %}
+          		{% if car.photo2 %}
+            		<img style="max-width: 100%; max-width: 400px;" class="car-photo" src="data:image/jpeg;base64,{{ car.photo2 }}" alt="Photo 2">
+          		{% endif %}
+          		</div>
+          		<div class="mobile" style="display: block;">
+            		{% if car.photo1 %}
+              		<img style="max-width: 50%;" class="car-photo" src="data:image/jpeg;base64,{{ car.photo1 }}" alt="Photo 1">
+            		{% endif %}
+           	 	{% if car.photo2 %}
+              		<img style="display:none; max-width: 50%;" class="car-photo" src="data:image/jpeg;base64,{{ car.photo2 }}" alt="Photo 2">
+            		{% endif %}
+            		</div>
+          		</ul>
+        	</li>
                 {% endfor %}
             </ul>
             <div class="pagination">

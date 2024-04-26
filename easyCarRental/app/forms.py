@@ -14,7 +14,7 @@ class LoginForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired()])
     remember_me = BooleanField('Remember Me')
     submit = SubmitField('Sign In')
-    
+
 
 class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired()])
@@ -35,7 +35,7 @@ class RegistrationForm(FlaskForm):
             User.email == email.data))
         if user is not None:
             raise ValidationError('Please use a different email address.')
-        
+
 
 class CarRentalForm(FlaskForm):
     fname = StringField('First Name', validators=[DataRequired()], render_kw={"pattern": "[a-zA-Z]+", "required": True})
@@ -108,7 +108,7 @@ class BookVehicleForm(FlaskForm):
     dropoff = DateField('Dropoff Date', format='%Y-%m-%d', validators=[DataRequired()])
     dropoff_location = SelectField('Drop-off Location', choices=[('Easy Rentals Office', 'Easy Rentals Office'), ('ADD Airport', 'ADD Airport')], validators=[DataRequired()])
     vehicle_type = SelectField('Vehicle Type', choices=[('sedan', 'Sedan'), ('compact', 'Compact'), ('suv', 'SUV'), ('truck', 'Truck'), ('van', 'Van')], validators=[DataRequired()])
-    PaymentMethod = SelectField('Payment Method', choices=[('CBE', 'CBE'), ('paypal', 'Paypal'), ('telebirr', 'Telebirr')])
+    PaymentMethod = SelectField('Payment Method', choices=[('pay on pickup', 'Pay on Pickup'), ('CBE', 'CBE'), ('telebirr', 'Telebirr')])
     VehicleId = IntegerField('VehicleId')
     submit = SubmitField('Book Vehicle')
 

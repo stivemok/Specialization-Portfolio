@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<section class="booking-form container" style="width: 80%; margin-left: 10%; padding: 20px;">
+<section class="booking-form container" style="width: 80%; margin-top: 10px; margin-left: 10%; padding: 20px;">
   <h1>Car Information Form</h1>
   <form method="POST" action="{{ url_for('AddCar') }}" enctype="multipart/form-data" style="width: 90%; display: flex; flex-wrap: wrap;">
     {{ form.hidden_tag() }}

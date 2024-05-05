@@ -17,7 +17,7 @@ class User(UserMixin, db.Model):
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
-    
+
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
 
@@ -46,7 +46,7 @@ class FormData(db.Model):
     make = db.Column(db.String(255))
     model = db.Column(db.String(255))
     color = db.Column(db.String(255))
-    price = db.Column(db.String(255)) 
+    price = db.Column(db.String(255))
     condition = db.Column(db.String(255))
     submissionDate = db.Column(db.DateTime)
 
@@ -81,12 +81,14 @@ class Booking(db.Model):
     mname = db.Column(db.String(255), nullable=False)
     lname = db.Column(db.String(255), nullable=False)
     idpassport = db.Column(db.LargeBinary((2**32)-1))
+    phone = db.Column(db.String(255))
+    email = db.Column(db.String(255))
     PaymentMethod = db.Column(db.String(255), nullable=False)
     # Add a VehicleId field
     VehicleId = db.Column(db.Integer, db.ForeignKey('vehicle.VehicleId'))
     # Add a relationship field for the Car model
     car = db.relationship('Car', backref='bookings')
-    
+
 
 class VehicleCount(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)

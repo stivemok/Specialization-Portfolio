@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <section class="booking-form container" style="width: 80%; margin-left: 10%; padding: 20px;">
+    <section class="booking-form container" style="width: 80%; margin-top: 10px; margin-left: 10%; padding: 20px;">
         <h2>Book Vehicle</h2>
 
         <form method="post" action="{{ url_for('BookVehicle', vehicle_id=car.VehicleId, vehicle_type=car.vehicle) }}" enctype="multipart/form-data" style="width: 90%;">
@@ -13,30 +13,44 @@
             <input type="hidden" name="vehicle_type" value="{{ car.vehicle }}">
 
           <div style="display: flex; flex-wrap: wrap;">
-            <div class="name" style="padding: 25px; flex: 1;">
+            <div class="name" style="padding: 10px; flex: 1;">
               {{ form.fname.label }}
               {{ form.fname(size=32, required=true) }}
             </div>
-            <div class="name" style="padding: 25px; flex: 1;">
+            <div class="name" style="padding: 10px; flex: 1;">
               {{ form.mname.label }}
               {{ form.mname(size=32, required=true) }}
             </div>
-            <div class="name" style="padding: 25px; flex: 1;">
+            <div class="name" style="padding: 10px; flex: 1;">
               {{ form.lname.label }}
               {{ form.lname(size=32, required=true) }}
             </div>
-            <div class="name" style="padding: 25px; flex: 1;">
+            <div class="name" style="padding: 10px; flex: 1;">
               {{ form.idpassport.label }}
               {{ form.idpassport }}
               {% for error in form.idpassport.errors %}
-                  <span style="color: red;">[{{ error }}]</span>
+                  <!--span style="color: red;">[{{ error }}]</span-->
               {% endfor %}
             </div>
-            <div class="name" style="padding: 20px; flex: 2;">
+	    <div class="form-group" style="flex: 1; padding: 10px;">
+              {{ form.phone.label }}
+              {{ form.phone(size=32) }}
+              {% for error in form.phone.errors %}
+                  <!--span style="color: red;">[{{ error }}]</span-->
+              {% endfor %}
+            </div>
+            <div class="form-group" style="flex: 1; padding: 10px;">
+              {{ form.email.label }}
+              {{ form.email(size=32) }}
+              {% for error in form.email.errors %}
+                  <!--span style="color: red;">[{{ error }}]</span-->
+              {% endfor %}
+            </div>
+            <div class="name" style="padding: 10px; flex: 1;">
               {{ form.pickup.label }}
               {{ form.pickup(size=20, id="pickup-date", required=true, pattern="\d{4}-\d{2}-\d{2}") }}
             </div>
-            <div class="name" style="padding: 20px; flex: 2;">
+            <div class="name" style="padding: 10px; flex: 1;">
               {{ form.dropoff.label }}
               {{ form.dropoff(size=20, id="dropoff-date", required=true, pattern="\d{4}-\d{2}-\d{2}") }}
             </div>
@@ -50,18 +64,18 @@
               {{ form.dropoff_location.label }}
               {{ form.dropoff_location(id="dropoff-location") }}
             </div>
-            <div class="name" style="padding: 25px; flex: 1;">
+            <div class="name" style="padding: 10px; flex: 1;">
               <label>Selected Vehicle Type</label>
               <p>{{ car.vehicle }}</p>
             </div>
-            <div class="name" style="padding: 10px; flex: 1; ">
+            <div class="name" style="padding: 10px; flex: 1;">
               {{ form.PaymentMethod.label }}
               {{ form.PaymentMethod(size=32, required=true) }}
             </div>
           </div>
           <div style="display: flex; flex-wrap: wrap;">
             <div class="name" style="padding: 10px; flex: 1;">
-              <button type="submit" class="btn btn-primary" style="width: 20%;">Book Vehicle</button>
+              <button type="submit" class="btn btn-primary" style="width: 30%;">Book Vehicle</button>
             </div>
           </div>
         </form>

@@ -1,6 +1,7 @@
+{% extends "base.html" %}
 {% block content %}
     <h1>{{ title }}</h1>
-    <form method="POST">
+    <form method="POST" style="margin-left: 5px;">
         <style>
             table {
                 border-collapse: collapse;
@@ -27,6 +28,8 @@
                     <th>First Name</th>
                     <th>Middle Name</th>
                     <th>Last Name</th>
+		    <th>Phone</th>
+                    <th>Email</th>
                     <th>ID Passport</th>
                     <th>Pickup Date</th>
                     <th>Pickup Location</th>
@@ -35,7 +38,7 @@
                     <th>Vehicle Type</th>
                     <th>Payment Method</th>
                     <th>Vehicle ID</th>
-                    <th>Plate No</th> <!-- Add Plate No column -->
+                    <th>Plate No</th>
                 </tr>
             </thead>
             <tbody>
@@ -46,6 +49,8 @@
                         <td>{{ booking.fname }}</td>
                         <td>{{ booking.mname }}</td>
                         <td>{{ booking.lname }}</td>
+			<td>{{ booking.phone }}</td>
+                        <td>{{ booking.email }}</td>
                         <td>
                             {% if booking.idpassport %}
                                 <img src="data:image/png;base64,{{ booking.idpassport }}" alt="ID Passport" class="idpassport" onclick="downloadImage(this)">
@@ -60,7 +65,7 @@
                         <td>{{ booking.vehicle_type }}</td>
                         <td>{{ booking.PaymentMethod }}</td>
                         <td>{{ booking.vehicle_id }}</td>
-                        <td>{{ booking.plate_no }}</td> <!-- Display Plate No -->
+                        <td>{{ booking.plate_no }}</td>
                     </tr>
                 {% endfor %}
             </tbody>

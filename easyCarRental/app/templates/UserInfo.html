@@ -1,4 +1,4 @@
-
+{% extends "base.html" %}
 
 {% block content %}
   <h2>Vehiceles to be Registered</h2>
@@ -17,7 +17,7 @@
   </style>
 
   {% if registrations %}
-  <form method="POST" action="{{ url_for('delete_registrations') }}">
+  <form method="POST" action="{{ url_for('delete_registrations') }}" style="margin-left: 5px;">
     <table>
       <thead>
         <tr>

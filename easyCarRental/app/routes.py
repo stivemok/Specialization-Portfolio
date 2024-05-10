@@ -17,6 +17,8 @@ from app.api.api_routes import submit_payment,  get_cars, get_registrations
 from flask import current_app
 from sqlalchemy.exc import SQLAlchemyError
 from datetime import datetime
+from flask_mail import Message
+from app import mail
 
 
 """ Flask route for the home page """
@@ -56,7 +58,7 @@ def logout():
 """Registration route to register an admin"""
 @app.route('/register', methods=['GET', 'POST'])
 def register():
-    
+
     form = RegistrationForm()
     if form.validate_on_submit():
         user = User(username=form.username.data, email=form.email.data)
@@ -322,7 +324,7 @@ def SearchVehicle():
 
     return render_template('VehicleSearch.html', title='Search Vehicle', form=form)
 
-"""booked vehicle route"""
+"""book vehicle route"""
 @app.route('/BookVehicle/<int:vehicle_id>/<vehicle_type>', methods=['GET', 'POST'])
 def BookVehicle(vehicle_id, vehicle_type):
     form = BookVehicleForm()
@@ -347,7 +349,7 @@ def BookVehicle(vehicle_id, vehicle_type):
         if form.pickup.data < current_date or form.dropoff.data < current_date:
             flash('Invalid date. Pickup and drop-off dates cannot be in the past.')
             return redirect(url_for('BookVehicle', vehicle_id=vehicle_id, vehicle_type=vehicle_type))
-        
+
         try:
             vehicle_type = form.vehicle_type.data
             idpassport_data = form.idpassport.data.read()
@@ -360,7 +362,7 @@ def BookVehicle(vehicle_id, vehicle_type):
 
             if not car.available or existing_booking:
                 flash('The car is not available. Please check another vehicle or date.')
-                
+
 
             payment_method_result = submit_payment(form.PaymentMethod.data)
             flash(f'Payment Result: {payment_method_result}')
@@ -375,6 +377,8 @@ def BookVehicle(vehicle_id, vehicle_type):
                 mname=form.mname.data,
                 lname=form.lname.data,
                 idpassport=idpassport_data,
+		phone=form.phone.data,
+		email=form.email.data,
                 PaymentMethod=form.PaymentMethod.data,
                 VehicleId=vehicle_id
             )
@@ -382,13 +386,32 @@ def BookVehicle(vehicle_id, vehicle_type):
 
             car.available = False
             vehicle_count = VehicleCount.query.filter_by(vehicle_type=form.vehicle_type.data).first()
-             
+
 
             if vehicle_count:
                 vehicle_count.count -= 1
 
             db.session.commit()
             flash('Successfully booked')
+	    # Send email confirmation
+            booking_details = (
+                f"First Name: {booking.fname}\n"
+                f"Middle Name: {booking.mname}\n"
+                f"Last Name: {booking.lname}\n"
+                f"Phone: {booking.phone}\n"
+                f"Pickup Date: {booking.pickup_date}\n"
+                f"Pickup Location: {booking.pickup_location}\n"
+                f"Dropoff Date: {booking.dropoff_date}\n"
+                f"Dropoff Location: {booking.dropoff_location}\n"
+                f"Vehicle Type: {booking.vehicle_type}\n"
+                f"Payment Method: {booking.PaymentMethod}\n\n"
+                "Your booking has been confirmed. Thank you!"
+                )
+
+            msg = Message('Booking Confirmation', sender='eazykiray@gmail.com', recipients=[form.email.data])
+            msg.body = booking_details
+            mail.send(msg)
+            flash('Confirmation email sent')
             return redirect(url_for('BookVehicle', vehicle_id=vehicle_id, vehicle_type=vehicle_type))
 
         except Exception as e:
@@ -406,7 +429,7 @@ def vehicle_count():
     counts = VehicleCount.query.all()
     return render_template('vehicle_count.html', title='Avaliable Vehicles', counts=counts)
 
-""""""
+"""route to check for booked vehicles"""
 @app.route('/BookedVehicle', methods=['GET', 'POST'])
 @login_required
 def BookedVehicle():
@@ -426,7 +449,7 @@ def BookedVehicle():
             # Fetch the car from the Car table and update its availability
             car = Car.query.get(booking.VehicleId)
             if car:
-                car.available = True 
+                car.available = True
                 db.session.add(car)  # Add the car to the session to track changes
 
         # Delete the selected bookings from the database
@@ -438,7 +461,7 @@ def BookedVehicle():
 
     # Get the page number from the request arguments
     page = request.args.get('page', 1, type=int)
-    per_page = 10
+    per_page = 50
 
     # Query the database for all bookings and related Car information
     bookings = Booking.query.options(db.joinedload(Booking.car)).paginate(page=page, per_page=per_page)
@@ -463,9 +486,11 @@ def BookedVehicle():
                 'mname': booking.mname,
                 'lname': booking.lname,
                 'idpassport': idpassport_base64,
+		'phone': booking.phone,
+                'email': booking.email,
                 'PaymentMethod': booking.PaymentMethod,
                 'vehicle_id': booking.VehicleId,
-                'plate_no': plate_no,  # Include PlateNo in the result
+                'plate_no': plate_no,
             }
             bookings_list.append(booking_details)
         except Exception as e:
